@@ -2,64 +2,14 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>
-            #map-wrapper {
-                background-color: black;
-                position: absolute;
-                top: 40px;
-                left: 40px;
-                width: calc(100vw - 40px);
-                height: calc(100vh - 40px);
-                overflow: scroll;
-                z-index: -1;
-            }
-            #map-container {
-                display: grid;
-                grid-template-columns: repeat(100, 40px);
-                background-color: lightgoldenrodyellow;
-                position: absolute;
-                top: 0;
-                left: 0;
-            }
-            .tile {
-                width: 40px;
-                height: 40px;
-                border-top: 2px dashed lightseagreen;
-                border-left: 2px dashed lightseagreen;
-                font-size: 10px;
-            }
-            #vertical-tool-border {
-                width: 40px;
-                height: 100vh;
-                position: fixed;
-                top: 0;
-                left: 0;
-                border-right: 4px dashed lightseagreen;
-            }
-            #horizontal-tool-border {
-                width: 100vw;
-                height: 40px;
-                position: fixed;
-                top: 0;
-                left: 0;
-                border-bottom: 4px dashed lightseagreen;
-            }
-            #tool {
-                position: fixed;
-                top: 10px;
-                left: 10px;
-                width: 60px;
-                height: 60px;
-                background-color: white;
-                border: 4px dashed lightseagreen;
-                border-radius: 60px;
-            }
-        </style>
+        <link href="index.css" rel="stylesheet" type="text/css" >
     </head>
     <body>
         <div id="vertical-tool-border"></div>
         <div id="horizontal-tool-border"></div>
-        <div id="tool" onclick="toggleDimentions()"></div>
+        <div id="tool" onclick="toggleDimentions()">
+            2D
+        </div>
 
 
         <div id="map-wrapper">
@@ -67,64 +17,15 @@
             </div>
         </div>
         <script src="LLA.js"></script>
+        <script src="map.js"></script>
         <script>
-            const container = document.getElementById('map-container');
-            const W = 100, H = 100;
-            for(let y = 0; y < H; y++) {
-                for(let x = 0; x < W; x++) {
-                    const tile = document.createElement('div');
-                    tile.id = `tile${x}-${y}`;
-                    tile.className = 'tile';
-                    container.appendChild(tile);
-                    tile.onclick = () => {
-                        tile.style.backgroundColor = 'lightseagreen';
-                        tile.innerHTML = `(${x}, ${y})`;
-                    };
-                }
-            }
-
-            const matrix = new LMat4([
-                Math.sqrt(3), 0, -Math.sqrt(3), 0,
-                1, 2, 1, 0,
-                Math.sqrt(2), -Math.sqrt(2), Math.sqrt(2), 0,
-                0, 0, 0, 1,
-            ].map(x => x * (1 / Math.sqrt(6))));
-            const rMat = new LMat4([
-                1, 0, 0, 0,
-                0, Math.cos(90 / 57.3), -Math.sin(90 / 57.3), 0,
-                0, Math.sin(90 / 57.3), Math.cos(90 / 57.3), 0,
-                0, 0, 0, 1,
-            ]);
-            let xx = LMat4.identity();
-            xx = LMat4.scale(0.6).mult(rMat);
-            const p = matrix.mult(xx);
-            const transposedMatrix = p.transpose();
-            console.log('m=', transposedMatrix);
-            let dimentions = '2d';
+            const map = new Map({
+                rootSelector: '#map-wrapper',
+            });
             function toggleDimentions() {
-                dimentions = dimentions === '2d' ? '3d' : '2d';
-                if  (dimentions === '2d') {
-                    container.style.transform = '';
-                } else {
-                    container.style.transform = `matrix3d(${transposedMatrix.arr.join(', ')})`;
-                }
+                map.toggleView();
+                document.getElementById('tool').innerHTML = map.view.toUpperCase();
             }
-
-            function goLeft(amount) {
-                const stringValue = container.style.left || '100px';
-                const value = Number(stringValue.substring(0, stringValue.length - 2));
-                const newValue = value + amount;
-                container.style.left = `${newValue}px`;
-            }
-
-            async function animate() {
-                while (true) {
-                    await new Promise(r => setTimeout(r, 100));
-                    goLeft(2);
-                }
-            }
-            // animate();
-
         </script>
     </body>
 </html>
