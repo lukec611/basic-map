@@ -11,3 +11,5 @@
     - set arrow on spot
     - add desk
     - add person
+
+<a href="https://lukec611.github.io/basic-map/">view here</a>
