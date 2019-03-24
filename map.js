@@ -23,6 +23,7 @@ class Map {
         this.rootSelector = options.rootSelector  || DEFAULT_MAP_OPTIONS.rootSelector;
         this.view = '2d';
         this._initialiseMap();
+        this.toggleView();
     }
 
     _initialiseMap() {
@@ -44,6 +45,14 @@ class Map {
                 };
             }
         }
+        this.mapContainer.appendChild(new Cube().createElement());
+        this.mapContainer.appendChild(new Cube({
+            x: 4 * 42,
+            y: 9 * 42,
+            colors: 'yellow,turquoise,lightseagreen'.split(','),
+            text: 'Lukes Desk,,'.split(','),
+            width: 50,
+        }).createElement());
     }
 
     toggleView() {

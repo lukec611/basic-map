@@ -2,10 +2,10 @@
 # Goals
 
 - operations
-    - move around
-    - generate map
-    - move operation
-    - toggle 3d / 2d
+    - move around ✔️
+    - generate map ✔️
+    - move operation ✔️
+    - toggle 3d / 2d ✔️
     - position value
     - setCenter
     - set arrow on spot

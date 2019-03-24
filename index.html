@@ -17,10 +17,13 @@
             </div>
         </div>
         <script src="LLA.js"></script>
+        <script src="cube.js"></script>
         <script src="map.js"></script>
         <script>
             const map = new Map({
                 rootSelector: '#map-wrapper',
+                width: 40,
+                height: 40,
             });
             function toggleDimentions() {
                 map.toggleView();
