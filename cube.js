@@ -45,6 +45,7 @@ class Cube {
         top.style.left = `${this.x}px`;
         top.className = 'desk';
         top.style.transform = `translate3d(0, 0, ${this.height}px)`;
+
         const side = document.createElement('div');
         side.style.width = `${this.depth}px`;
         side.style.height = `${this.height}px`;
@@ -53,17 +54,29 @@ class Cube {
         side.style.top = `${this.y}px`;
         side.style.left = `${this.x}px`;
         side.style.zIndex = '2000';
-        // side.style.transformStyle = 'preserve-3d';
         side.className = 'desk';
-        const r = LMat4.rotateY(5);
-        const t = LMat4.trans(0, 0, 0);
-        const out = t.mult(r);
-        // side.style.transform = `matrix3d(${out.transpose().arr.join(', ')})`;
-        side.style.transform = `translate3d(${this.width}px, ${this.depth - 42}px, ${0}px) rotateY(90deg)  rotateZ(-90deg)`;
-        side.style.transformOrigin = '0% 100%';
+        side.style.transform = `translate3d(${this.width}px, ${this.depth}px, ${this.height}px) rotateZ(-90deg) rotateX(-90deg)`;
+        side.style.transformOrigin = '0% 0%';
+        side.innerHTML = this.text[1];
+
+        const front = document.createElement('div');
+        front.style.width = `${this.width}px`;
+        front.style.height = `${this.height}px`;
+        front.style.backgroundColor = this.colors[2];
+        front.style.position = 'absolute';
+        front.style.top = `${this.y}px`;
+        front.style.left = `${this.x}px`;
+        front.style.zIndex = '2000';
+        front.className = 'desk';
+        front.style.transform = `translate3d(${0}px, ${this.depth}px, ${this.height}px) rotateX(-90deg)`;
+        front.style.transformOrigin = '0% 0%';
+        front.innerHTML = this.text[2];
+        front.style.color = 'white';
+        
+        
         container.appendChild(top);
         container.appendChild(side);
-        side.innerHTML = this.text[1];
+        container.appendChild(front);
 
         return container;
     }
