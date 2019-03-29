@@ -209,137 +209,170 @@ class LV2 {
 	}
 }
 
-// LV3
+class LV3 {
+	// x: number
+	// y: number
+	// z: number
+	constructor(x, y, z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
 
-function LV3(x, y, z){
-	this.x = x;
-	this.y = y;
-	this.z = z;
-}
+	// return: string
+	toString() {
+		return '[' + this.x + ',' + this.y + ',' + this.z + ']';
+	}
 
-LV3.prototype.toString = function(){
-	return '[' + this.x + ',' + this.y + ',' + this.z + ']';
-}
+	// return: LV3
+	copy() {
+		return new LV3(this.x, this.y, this.z);
+	}
 
-LV3.prototype.copy = function(){
-	return new LV3(this.x, this.y, this.z);
-}
+	// o: LV3
+	setAs(o) {
+		this.x = o.x;
+		this.y = o.y;
+		this.z = o.z;
+	}
 
-LV3.prototype.setAs = function(o){
-	this.x = o.x;
-	this.y = o.y;
-	this.z = o.z;
-}
+	// x: number
+	// y: number
+	// z: number
+	setValues(x, y, z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
 
-LV3.prototype.setValues = function(x, y, z){
-	this.x = x;
-	this.y = y;
-	this.z = z;
-}
+	// o: LV3
+	// return: LV3
+	add(o) {
+		return new LV3(this.x + o.x, this.y + o.y, this.z + o.z);
+	}
 
-LV3.prototype.add = function(o){
-	return new LV3(this.x + o.x, this.y + o.y, this.z + o.z);
-}
+	// o: LV3
+	iadd(o) {
+		this.x += o.x;
+		this.y += o.y;
+		this.z += o.z;
+	}
 
-LV3.prototype.iadd = function(o){
-	this.x += o.x;
-	this.y += o.y;
-	this.z += o.z;
-}
+	// o: LV3
+	// return: LV3
+	sub(o) {
+		return new LV3(this.x - o.x, this.y - o.y, this.z - o.z);
+	}
 
-LV3.prototype.sub = function(o){
-	return new LV3(this.x - o.x, this.y - o.y, this.z - o.z);
-}
+	// o: LV3
+	isub(o) {
+		this.x -= o.x;
+		this.y -= o.y;
+		this.z -= o.z;
+	}
 
-LV3.prototype.isub = function(o){
-	this.x -= o.x;
-	this.y -= o.y;
-	this.z -= o.z;
-}
+	// s: number
+	// return: LV3
+	scale(s) {
+		return new LV3(this.x * s, this.y * s, this.z * s);
+	}
 
-LV3.prototype.scale = function(s){
-	return new LV3(this.x * s, this.y * s, this.z * s);
-}
+	// s: number
+	// return: LV3
+	iscale(s) {
+		this.x *= s;
+		this.y *= s;
+		this.z *= s;
+	}
 
-LV3.prototype.iscale = function(s){
-	this.x *= s;
-	this.y *= s;
-	this.z *= s;
-}
+	// s: number
+	// return: LV3
+	div(s) {
+		return new LV3(this.x / s, this.y / s, this.z / s);
+	}
 
-LV3.prototype.div = function(s){
-	return new LV3(this.x / s, this.y / s, this.z / s);
-}
+	// s: number
+	idiv(s) {
+		this.x /= s;
+		this.y /= s;
+		this.z /= s;
+	}
 
-LV3.prototype.idiv = function(s){
-	this.x /= s;
-	this.y /= s;
-	this.z /= s;
-}
+	// o: LV3
+	// return: number
+	dot(o) {
+		return this.x * o.x + this.y * o.y + this.z * o.z;
+	}
 
-LV3.prototype.dot = function(o){
-	return this.x * o.x + this.y * o.y + this.z * o.z;
-}
+	// o: LV3
+	// return: LV3
+	cross(o) {
+		return new LV3(
+			this.y * o.z - this.z * o.y,
+			this.z * o.x - this.x * o.z,
+			this.x * o.y - this.y * o.x
+		);
+	}
 
-LV3.prototype.cross = function(o){
-	return new LV3(this.y * o.z - this.z * o.y,
-				   this.z * o.x - this.x * o.z,
-				   this.x * o.y - this.y * o.x
-			);
-}
-
-LV3.prototype.icross = function(o){
-	var x = this.x;
-	var y = this.y;
-	var z = this.z;
-	this.x = y * o.z - z * o.y;
-	this.y = z * o.x - x * o.z;
-	this.z = x * o.y - y * o.x;
-}
-
-
-LV3.prototype.dist = function(o){
-	var dx = this.x - o.x;
-	var dy = this.y - o.y;
-	var dz = this.z - o.z;
-	return Math.sqrt(dx * dx + dy * dy + dz * dz);
-}
-
-LV3.prototype.mag = function(){
-	return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
-}
-
-LV3.prototype.round = function(){
-	return new LV3(Math.round(this.x), Math.round(this.y), Math.round(this.z));
-}
-
-LV3.prototype.floor = function(){
-	return new LV3(Math.floor(this.x), Math.floor(this.y), Math.floor(this.z));
-}
-
-LV3.prototype.iround = function(){
-	this.x = Math.round(this.x);
-	this.y = Math.round(this.y);
-	this.z = Math.round(this.z);
-}
-
-LV3.prototype.ifloor = function(){
-	this.x = Math.floor(this.x);
-	this.y = Math.floor(this.y);
-	this.z = Math.floor(this.z);
-}
+	// o: LV3
+	icross(o) {
+		var x = this.x;
+		var y = this.y;
+		var z = this.z;
+		this.x = y * o.z - z * o.y;
+		this.y = z * o.x - x * o.z;
+		this.z = x * o.y - y * o.x;
+	}
 
 
-LV3.prototype.unit = function(){
-	var m = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
-	return new LV3(this.x / m, this.y / m, this.z / m);	
-}
+	// o: LV3
+	// return: number
+	dist(o) {
+		var dx = this.x - o.x;
+		var dy = this.y - o.y;
+		var dz = this.z - o.z;
+		return Math.sqrt(dx * dx + dy * dy + dz * dz);
+	}
 
-LV3.prototype.iunit = function(){
-	var m = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
-	this.x /= m;
-	this.y /= m;
-	this.z /= m;	
+	// return: number
+	mag() {
+		return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+	}
+
+	// return: LV3
+	round() {
+		return new LV3(Math.round(this.x), Math.round(this.y), Math.round(this.z));
+	}
+
+	// return: LV3
+	floor() {
+		return new LV3(Math.floor(this.x), Math.floor(this.y), Math.floor(this.z));
+	}
+
+	iround() {
+		this.x = Math.round(this.x);
+		this.y = Math.round(this.y);
+		this.z = Math.round(this.z);
+	}
+
+	ifloor() {
+		this.x = Math.floor(this.x);
+		this.y = Math.floor(this.y);
+		this.z = Math.floor(this.z);
+	}
+
+	// return: LV3
+	unit() {
+		var m = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+		return new LV3(this.x / m, this.y / m, this.z / m);	
+	}
+
+	iunit() {
+		var m = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+		this.x /= m;
+		this.y /= m;
+		this.z /= m;	
+	}
 }
 
 //LMat3
