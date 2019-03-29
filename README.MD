@@ -1,15 +1,11 @@
 
 # Goals
 
-- operations
-    - move around ✔️
-    - generate map ✔️
-    - move operation ✔️
-    - toggle 3d / 2d ✔️
-    - position value
-    - setCenter
-    - set arrow on spot
-    - add desk
-    - add person
+- LLA to es6
+- 3d map shifted into view
+- es6 modules
+- map builder
+- people
+- animals?
 
 <a href="https://lukec611.github.io/basic-map/">view here</a>
