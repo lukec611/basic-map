@@ -522,162 +522,183 @@ class LMat3 {
 	}
 }
 
+class LMat4 {
 
+	// inp?: [number * 16]
+	constructor(inp) {
+		if(inp === undefined) {
+			this.arr = [0, 0, 0, 0,
+						0, 0, 0, 0,
+						0, 0, 0, 0,
+						0, 0, 0, 0];
+		} else this.arr = inp;
+	}
 	
-//LMat4
-function LMat4(inp){
-	if(inp === undefined)
-		this.arr = [0, 0, 0, 0,
-					0, 0, 0, 0,
-					0, 0, 0, 0,
-					0, 0, 0, 0];
-	else
-		this.arr = inp;
-}
-
-LMat4.prototype.toString = function(){
-	return '|' + this.arr[0] + ',' + this.arr[1] + ',' + this.arr[2] + ',' + this.arr[3] + '|\n' + 
-		   '|' + this.arr[4] + ',' + this.arr[5] + ',' + this.arr[6] + ',' + this.arr[7] + '|\n' + 
-		   '|' + this.arr[8] + ',' + this.arr[9] + ',' + this.arr[10] + ',' + this.arr[11] + '|\n' + 
-		   '|' + this.arr[12] + ',' + this.arr[13] + ',' + this.arr[14] + ',' + this.arr[15] + '|\n';
-}
-
-LMat4.prototype.copy = function(){
-	return new LMat4(this.arr.slice());
-}
-
-LMat4.prototype.itranspose = function(){
-	this.arr = [
-		this.arr[0], this.arr[4], this.arr[8], this.arr[12],
-		this.arr[1], this.arr[5], this.arr[9], this.arr[13],
-		this.arr[2], this.arr[6], this.arr[10], this.arr[14],
-		this.arr[3], this.arr[7], this.arr[11], this.arr[15]
-	];
-}
-
-LMat4.prototype.transpose = function(){
-	return new LMat4([
-		this.arr[0], this.arr[4], this.arr[8], this.arr[12],
-		this.arr[1], this.arr[5], this.arr[9], this.arr[13],
-		this.arr[2], this.arr[6], this.arr[10], this.arr[14],
-		this.arr[3], this.arr[7], this.arr[11], this.arr[15]
-	]);
-}
-
-LMat4.prototype.imult = function(m){
-	this.arr = [
-		this.arr[0]*m.arr[0] + this.arr[1]*m.arr[4] + this.arr[2]*m.arr[8] + this.arr[3]*m.arr[12],
-		this.arr[0]*m.arr[1] + this.arr[1]*m.arr[5] + this.arr[2]*m.arr[9] + this.arr[3]*m.arr[13],
-		this.arr[0]*m.arr[2] + this.arr[1]*m.arr[6] + this.arr[2]*m.arr[10] + this.arr[3]*m.arr[14],
-		this.arr[0]*m.arr[3] + this.arr[1]*m.arr[7] + this.arr[2]*m.arr[11] + this.arr[3]*m.arr[15],
-
-		this.arr[4]*m.arr[0] + this.arr[5]*m.arr[4] + this.arr[6]*m.arr[8] + this.arr[7]*m.arr[12],
-		this.arr[4]*m.arr[1] + this.arr[5]*m.arr[5] + this.arr[6]*m.arr[9] + this.arr[7]*m.arr[13],
-		this.arr[4]*m.arr[2] + this.arr[5]*m.arr[6] + this.arr[6]*m.arr[10] + this.arr[7]*m.arr[14],
-		this.arr[4]*m.arr[3] + this.arr[5]*m.arr[7] + this.arr[6]*m.arr[11] + this.arr[7]*m.arr[15],
-
-		this.arr[8]*m.arr[0] + this.arr[9]*m.arr[4] + this.arr[10]*m.arr[8] + this.arr[11]*m.arr[12],
-		this.arr[8]*m.arr[1] + this.arr[9]*m.arr[5] + this.arr[10]*m.arr[9] + this.arr[11]*m.arr[13],
-		this.arr[8]*m.arr[2] + this.arr[9]*m.arr[6] + this.arr[10]*m.arr[10] + this.arr[11]*m.arr[14],
-		this.arr[8]*m.arr[3] + this.arr[9]*m.arr[7] + this.arr[10]*m.arr[11] + this.arr[11]*m.arr[15],
-
-		this.arr[12]*m.arr[0] + this.arr[13]*m.arr[4] + this.arr[14]*m.arr[8] + this.arr[15]*m.arr[12],
-		this.arr[12]*m.arr[1] + this.arr[13]*m.arr[5] + this.arr[14]*m.arr[9] + this.arr[15]*m.arr[13],
-		this.arr[12]*m.arr[2] + this.arr[13]*m.arr[6] + this.arr[14]*m.arr[10] + this.arr[15]*m.arr[14],
-		this.arr[12]*m.arr[3] + this.arr[13]*m.arr[7] + this.arr[14]*m.arr[11] + this.arr[15]*m.arr[15]
-		
-	];
-}
-
-LMat4.prototype.mult = function(m){
-	return new LMat4([
-		this.arr[0]*m.arr[0] + this.arr[1]*m.arr[4] + this.arr[2]*m.arr[8] + this.arr[3]*m.arr[12],
-		this.arr[0]*m.arr[1] + this.arr[1]*m.arr[5] + this.arr[2]*m.arr[9] + this.arr[3]*m.arr[13],
-		this.arr[0]*m.arr[2] + this.arr[1]*m.arr[6] + this.arr[2]*m.arr[10] + this.arr[3]*m.arr[14],
-		this.arr[0]*m.arr[3] + this.arr[1]*m.arr[7] + this.arr[2]*m.arr[11] + this.arr[3]*m.arr[15],
-
-		this.arr[4]*m.arr[0] + this.arr[5]*m.arr[4] + this.arr[6]*m.arr[8] + this.arr[7]*m.arr[12],
-		this.arr[4]*m.arr[1] + this.arr[5]*m.arr[5] + this.arr[6]*m.arr[9] + this.arr[7]*m.arr[13],
-		this.arr[4]*m.arr[2] + this.arr[5]*m.arr[6] + this.arr[6]*m.arr[10] + this.arr[7]*m.arr[14],
-		this.arr[4]*m.arr[3] + this.arr[5]*m.arr[7] + this.arr[6]*m.arr[11] + this.arr[7]*m.arr[15],
-
-		this.arr[8]*m.arr[0] + this.arr[9]*m.arr[4] + this.arr[10]*m.arr[8] + this.arr[11]*m.arr[12],
-		this.arr[8]*m.arr[1] + this.arr[9]*m.arr[5] + this.arr[10]*m.arr[9] + this.arr[11]*m.arr[13],
-		this.arr[8]*m.arr[2] + this.arr[9]*m.arr[6] + this.arr[10]*m.arr[10] + this.arr[11]*m.arr[14],
-		this.arr[8]*m.arr[3] + this.arr[9]*m.arr[7] + this.arr[10]*m.arr[11] + this.arr[11]*m.arr[15],
-
-		this.arr[12]*m.arr[0] + this.arr[13]*m.arr[4] + this.arr[14]*m.arr[8] + this.arr[15]*m.arr[12],
-		this.arr[12]*m.arr[1] + this.arr[13]*m.arr[5] + this.arr[14]*m.arr[9] + this.arr[15]*m.arr[13],
-		this.arr[12]*m.arr[2] + this.arr[13]*m.arr[6] + this.arr[14]*m.arr[10] + this.arr[15]*m.arr[14],
-		this.arr[12]*m.arr[3] + this.arr[13]*m.arr[7] + this.arr[14]*m.arr[11] + this.arr[15]*m.arr[15]
-		
-	]);
-}
-
-
-LMat4.prototype.multLV3 = function(p){
-	return new LV3(p.x * this.arr[0] + p.y * this.arr[1] + p.z * this.arr[2] + this.arr[3],
-				   p.x * this.arr[4] + p.y * this.arr[5] + p.z * this.arr[6] + this.arr[7],
-				   p.x * this.arr[8] + p.y * this.arr[9] + p.z * this.arr[10] + this.arr[11]);
-}
-
-
-LMat4.scale = function(scalar){
-	return new LMat4([scalar, 0, 0, 0, 
-					  0, scalar, 0, 0,
-					  0, 0, scalar, 0,
-					  0, 0, 0, 1]);
-}
-
-LMat4.trans = function(x, y, z){
-	return new LMat4([1, 0, 0, x,
-					  0, 1, 0, y,
-					  0, 0, 1, z,
-					  0, 0, 0, 1]);
-}
-
-LMat4.rotateX = function(angle){
-	angle *= 0.0174533;
-	var cosine = Math.cos(angle);
-	var sinus = Math.sin(angle);
-	return new LMat4([1, 0, 0, 0,
-					  0, cosine, -sinus, 0,
-					  0, sinus, cosine, 0,
-					  0, 0, 0, 1
+	// return: string
+	toString() {
+		return '|' + this.arr[0] + ',' + this.arr[1] + ',' + this.arr[2] + ',' + this.arr[3] + '|\n' + 
+			   '|' + this.arr[4] + ',' + this.arr[5] + ',' + this.arr[6] + ',' + this.arr[7] + '|\n' + 
+			   '|' + this.arr[8] + ',' + this.arr[9] + ',' + this.arr[10] + ',' + this.arr[11] + '|\n' + 
+			   '|' + this.arr[12] + ',' + this.arr[13] + ',' + this.arr[14] + ',' + this.arr[15] + '|\n';
+	}
+	
+	// return: LMat4
+	copy() {
+		return new LMat4(this.arr.slice());
+	}
+	
+	itranspose() {
+		this.arr = [
+			this.arr[0], this.arr[4], this.arr[8], this.arr[12],
+			this.arr[1], this.arr[5], this.arr[9], this.arr[13],
+			this.arr[2], this.arr[6], this.arr[10], this.arr[14],
+			this.arr[3], this.arr[7], this.arr[11], this.arr[15]
+		];
+	}
+	
+	// return: LMat4
+	transpose() {
+		return new LMat4([
+			this.arr[0], this.arr[4], this.arr[8], this.arr[12],
+			this.arr[1], this.arr[5], this.arr[9], this.arr[13],
+			this.arr[2], this.arr[6], this.arr[10], this.arr[14],
+			this.arr[3], this.arr[7], this.arr[11], this.arr[15]
 		]);
-}
-
-
-LMat4.rotateY = function(angle){
-	angle *= 0.0174533;
-	var cosine = Math.cos(angle);
-	var sinus = Math.sin(angle);
-	return new LMat4([cosine, 0, sinus, 0,
-					  0, 1, 0, 0,
-					  -sinus, 0, cosine, 0,
-					  0, 0, 0, 1
+	}
+	
+	// m: LMat4
+	imult(m) {
+		this.arr = [
+			this.arr[0]*m.arr[0] + this.arr[1]*m.arr[4] + this.arr[2]*m.arr[8] + this.arr[3]*m.arr[12],
+			this.arr[0]*m.arr[1] + this.arr[1]*m.arr[5] + this.arr[2]*m.arr[9] + this.arr[3]*m.arr[13],
+			this.arr[0]*m.arr[2] + this.arr[1]*m.arr[6] + this.arr[2]*m.arr[10] + this.arr[3]*m.arr[14],
+			this.arr[0]*m.arr[3] + this.arr[1]*m.arr[7] + this.arr[2]*m.arr[11] + this.arr[3]*m.arr[15],
+	
+			this.arr[4]*m.arr[0] + this.arr[5]*m.arr[4] + this.arr[6]*m.arr[8] + this.arr[7]*m.arr[12],
+			this.arr[4]*m.arr[1] + this.arr[5]*m.arr[5] + this.arr[6]*m.arr[9] + this.arr[7]*m.arr[13],
+			this.arr[4]*m.arr[2] + this.arr[5]*m.arr[6] + this.arr[6]*m.arr[10] + this.arr[7]*m.arr[14],
+			this.arr[4]*m.arr[3] + this.arr[5]*m.arr[7] + this.arr[6]*m.arr[11] + this.arr[7]*m.arr[15],
+	
+			this.arr[8]*m.arr[0] + this.arr[9]*m.arr[4] + this.arr[10]*m.arr[8] + this.arr[11]*m.arr[12],
+			this.arr[8]*m.arr[1] + this.arr[9]*m.arr[5] + this.arr[10]*m.arr[9] + this.arr[11]*m.arr[13],
+			this.arr[8]*m.arr[2] + this.arr[9]*m.arr[6] + this.arr[10]*m.arr[10] + this.arr[11]*m.arr[14],
+			this.arr[8]*m.arr[3] + this.arr[9]*m.arr[7] + this.arr[10]*m.arr[11] + this.arr[11]*m.arr[15],
+	
+			this.arr[12]*m.arr[0] + this.arr[13]*m.arr[4] + this.arr[14]*m.arr[8] + this.arr[15]*m.arr[12],
+			this.arr[12]*m.arr[1] + this.arr[13]*m.arr[5] + this.arr[14]*m.arr[9] + this.arr[15]*m.arr[13],
+			this.arr[12]*m.arr[2] + this.arr[13]*m.arr[6] + this.arr[14]*m.arr[10] + this.arr[15]*m.arr[14],
+			this.arr[12]*m.arr[3] + this.arr[13]*m.arr[7] + this.arr[14]*m.arr[11] + this.arr[15]*m.arr[15]
+			
+		];
+	}
+	
+	// m: LMat4
+	// return: LMat4
+	mult(m) {
+		return new LMat4([
+			this.arr[0]*m.arr[0] + this.arr[1]*m.arr[4] + this.arr[2]*m.arr[8] + this.arr[3]*m.arr[12],
+			this.arr[0]*m.arr[1] + this.arr[1]*m.arr[5] + this.arr[2]*m.arr[9] + this.arr[3]*m.arr[13],
+			this.arr[0]*m.arr[2] + this.arr[1]*m.arr[6] + this.arr[2]*m.arr[10] + this.arr[3]*m.arr[14],
+			this.arr[0]*m.arr[3] + this.arr[1]*m.arr[7] + this.arr[2]*m.arr[11] + this.arr[3]*m.arr[15],
+	
+			this.arr[4]*m.arr[0] + this.arr[5]*m.arr[4] + this.arr[6]*m.arr[8] + this.arr[7]*m.arr[12],
+			this.arr[4]*m.arr[1] + this.arr[5]*m.arr[5] + this.arr[6]*m.arr[9] + this.arr[7]*m.arr[13],
+			this.arr[4]*m.arr[2] + this.arr[5]*m.arr[6] + this.arr[6]*m.arr[10] + this.arr[7]*m.arr[14],
+			this.arr[4]*m.arr[3] + this.arr[5]*m.arr[7] + this.arr[6]*m.arr[11] + this.arr[7]*m.arr[15],
+	
+			this.arr[8]*m.arr[0] + this.arr[9]*m.arr[4] + this.arr[10]*m.arr[8] + this.arr[11]*m.arr[12],
+			this.arr[8]*m.arr[1] + this.arr[9]*m.arr[5] + this.arr[10]*m.arr[9] + this.arr[11]*m.arr[13],
+			this.arr[8]*m.arr[2] + this.arr[9]*m.arr[6] + this.arr[10]*m.arr[10] + this.arr[11]*m.arr[14],
+			this.arr[8]*m.arr[3] + this.arr[9]*m.arr[7] + this.arr[10]*m.arr[11] + this.arr[11]*m.arr[15],
+	
+			this.arr[12]*m.arr[0] + this.arr[13]*m.arr[4] + this.arr[14]*m.arr[8] + this.arr[15]*m.arr[12],
+			this.arr[12]*m.arr[1] + this.arr[13]*m.arr[5] + this.arr[14]*m.arr[9] + this.arr[15]*m.arr[13],
+			this.arr[12]*m.arr[2] + this.arr[13]*m.arr[6] + this.arr[14]*m.arr[10] + this.arr[15]*m.arr[14],
+			this.arr[12]*m.arr[3] + this.arr[13]*m.arr[7] + this.arr[14]*m.arr[11] + this.arr[15]*m.arr[15]
+			
 		]);
+	}
+	
+	// p: LV3
+	// return: LV3
+	multLV3(p) {
+		return new LV3(p.x * this.arr[0] + p.y * this.arr[1] + p.z * this.arr[2] + this.arr[3],
+					   p.x * this.arr[4] + p.y * this.arr[5] + p.z * this.arr[6] + this.arr[7],
+					   p.x * this.arr[8] + p.y * this.arr[9] + p.z * this.arr[10] + this.arr[11]);
+	}
+	
+	// scalar: number
+	// return: LMat4
+	static scale(scalar) {
+		return new LMat4([scalar, 0, 0, 0, 
+						  0, scalar, 0, 0,
+						  0, 0, scalar, 0,
+						  0, 0, 0, 1]);
+	}
+	
+	// x: number
+	// y: number
+	// z: number
+	// return: LMat4
+	static trans(x, y, z) {
+		return new LMat4([1, 0, 0, x,
+						  0, 1, 0, y,
+						  0, 0, 1, z,
+						  0, 0, 0, 1]);
+	}
+	
+	// angle: number
+	// return: LMat4
+	static rotateX(angle) {
+		angle *= 0.0174533;
+		var cosine = Math.cos(angle);
+		var sinus = Math.sin(angle);
+		return new LMat4([1, 0, 0, 0,
+						  0, cosine, -sinus, 0,
+						  0, sinus, cosine, 0,
+						  0, 0, 0, 1
+			]);
+	}
+	
+	// angle: number
+	// return: LMat4
+	static rotateY(angle) {
+		angle *= 0.0174533;
+		var cosine = Math.cos(angle);
+		var sinus = Math.sin(angle);
+		return new LMat4([cosine, 0, sinus, 0,
+						  0, 1, 0, 0,
+						  -sinus, 0, cosine, 0,
+						  0, 0, 0, 1
+			]);
+	}
+	
+	// angle: number
+	// return: LMat4
+	static rotateZ(angle) {
+		angle *= 0.0174533;
+		var cosine = Math.cos(angle);
+		var sinus = Math.sin(angle);
+		return new LMat4([cosine, -sinus, 0, 0,
+						  sinus, cosine, 0, 0,
+						  0, 0, 0, 0,
+						  0, 0, 0, 1
+			]);
+	}
+	
+	// return: LMat4
+	static zero() {
+		return new LMat4();
+	}
+	
+	// return: LMat4
+	static identity() {
+		return new LMat4([1, 0, 0, 0,
+						  0, 1, 0, 0,
+						  0, 0, 1, 0,
+						  0, 0, 0, 1]);
+	}
 }
+	
 
 
-LMat4.rotateZ = function(angle){
-	angle *= 0.0174533;
-	var cosine = Math.cos(angle);
-	var sinus = Math.sin(angle);
-	return new LMat4([cosine, -sinus, 0, 0,
-					  sinus, cosine, 0, 0,
-					  0, 0, 0, 0,
-					  0, 0, 0, 1
-		]);
-}
-
-LMat4.zero = function(){
-	return new LMat4();
-}
-
-LMat4.identity = function(){
-	return new LMat4([1, 0, 0, 0,
-					  0, 1, 0, 0,
-					  0, 0, 1, 0,
-					  0, 0, 0, 1]);
-}
