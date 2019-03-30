@@ -2,6 +2,7 @@
 const DEFAULT_CUBE_OPTIONS = {
     x: 0,
     y: 9 * 42,
+    z: 0,
     tileSize: 1,
     width: 100,
     height: 40,
@@ -23,7 +24,7 @@ class Cube {
     }
     */
     constructor(options = {}) {
-        'x,y,width,height,depth,colors,text'.split(',')
+        'x,y,z,width,height,depth,colors,text'.split(',')
             .forEach(id => this[id] = options[id] || DEFAULT_CUBE_OPTIONS[id]);
     }
 
@@ -44,7 +45,7 @@ class Cube {
         top.style.top = `${this.y}px`;
         top.style.left = `${this.x}px`;
         top.className = 'desk';
-        top.style.transform = `translate3d(0, 0, ${this.height}px)`;
+        top.style.transform = `translate3d(0, 0, ${this.height + this.z}px)`;
 
         const side = document.createElement('div');
         side.style.width = `${this.depth}px`;
@@ -55,7 +56,7 @@ class Cube {
         side.style.left = `${this.x}px`;
         side.style.zIndex = '2000';
         side.className = 'desk';
-        side.style.transform = `translate3d(${this.width}px, ${this.depth}px, ${this.height}px) rotateZ(-90deg) rotateX(-90deg)`;
+        side.style.transform = `translate3d(${this.width}px, ${this.depth}px, ${this.height + this.z}px) rotateZ(-90deg) rotateX(-90deg)`;
         side.style.transformOrigin = '0% 0%';
         side.innerHTML = this.text[1];
 
@@ -68,7 +69,7 @@ class Cube {
         front.style.left = `${this.x}px`;
         front.style.zIndex = '2000';
         front.className = 'desk';
-        front.style.transform = `translate3d(${0}px, ${this.depth}px, ${this.height}px) rotateX(-90deg)`;
+        front.style.transform = `translate3d(${0}px, ${this.depth}px, ${this.height + this.z}px) rotateX(-90deg)`;
         front.style.transformOrigin = '0% 0%';
         front.innerHTML = this.text[2];
         front.style.color = 'white';

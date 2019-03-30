@@ -20,6 +20,7 @@
         </div>
         <script src="LLA.js"></script>
         <script src="cube.js"></script>
+        <script src="desk.js"></script>
         <script src="map.js"></script>
         <script>
             const map = new Map({
@@ -61,6 +62,11 @@
                 }),
             ];
             cubes.forEach(cube => map.addItem(cube.createElement()));
+
+            const desk = new Desk(400, 10, '<div style="color:white;padding:4px;">Luke\'s Desk</div>');
+            desk.addToMap(map);
+            const desk2 = new Desk(400, 140, '<div style="color:white;padding:4px;">Angus\' Desk</div>');
+            desk2.addToMap(map);
 
         </script>
     </body>
