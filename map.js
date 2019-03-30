@@ -1,7 +1,7 @@
 
 const DEFAULT_MAP_OPTIONS = {
-    width: 50,
-    height: 50,
+    width: 25,
+    height: 25,
     tileSize: 40,
     rootSelector: 'body',
 };
@@ -76,6 +76,12 @@ class Map {
     toggleView() {
         this.view = this.view === '2d' ? '3d' : '2d';
         this.mapContainer.style.transform = Map.computeCssMatrix3d(this.view);
+        this.mapContainer.style.top = this.view === '2d'
+            ? '0px'
+            : '200px';
+        this.mapContainer.style.left = this.view === '2d'
+            ? '0px'
+            : '450px';
     }
 
     // type: '2d' | '3d'
