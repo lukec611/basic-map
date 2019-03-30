@@ -45,32 +45,10 @@ class Map {
                 };
             }
         }
-        this.mapContainer.appendChild(new Cube().createElement());
-        this.mapContainer.appendChild(new Cube({
-            x: 8 * 42,
-            y: 13 * 42,
-            colors: 'yellow,turquoise,lightseagreen'.split(','),
-            text: 'Luke\'s Cube,,'.split(','),
-            width: 50,
-        }).createElement());
-        this.mapContainer.appendChild(new Cube({
-            x: 7 * 40,
-            y: 5 * 40,
-            colors: 'yellow,turquoise,black'.split(','),
-            text: 'ok,world,then()'.split(','),
-            width: 42*1,
-            height: 42*2,
-            depth: 42,
-        }).createElement());
-        this.mapContainer.appendChild(new Cube({
-            x: 16 * 40,
-            y: 18 * 40,
-            colors: '#90EE90,#4c7f4c,#74bf74'.split(','),
-            text: 'building,your,future'.split(','),
-            width: 42*5,
-            height: 42*2,
-            depth: 42*4,
-        }).createElement());
+    }
+
+    addItem(element) {
+        this.mapContainer.appendChild(element);
     }
 
     toggleView() {
