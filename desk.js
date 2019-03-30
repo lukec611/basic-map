@@ -26,8 +26,8 @@ class Desk {
         this.cubes.push(
             // leg btm rht
             new Cube({
-                x: this.x + width - woodDepth * 0.5,
-                y: this.y + length - woodDepth * 0.5,
+                x: this.x + width - woodDepth,
+                y: this.y + length - woodDepth,
                 colors,
                 text: ['', '', ''],
                 width: woodDepth,
@@ -37,7 +37,7 @@ class Desk {
             // leg btm lft
             new Cube({
                 x: this.x,
-                y: this.y + length - woodDepth * 0.5,
+                y: this.y + length - woodDepth,
                 colors,
                 text: ['', '', ''],
                 width: woodDepth,
@@ -46,7 +46,7 @@ class Desk {
             }),
             // leg top rht
             new Cube({
-                x: this.x + width - woodDepth * 0.5,
+                x: this.x + width - woodDepth,
                 y: this.y,
                 colors,
                 text: ['', '', ''],

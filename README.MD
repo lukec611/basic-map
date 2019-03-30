@@ -1,10 +1,7 @@
 
 # Goals
 
-- LLA to es6
-- 3d map shifted into view
-- es6 modules
-- map builder
+- desks ✅
 - people
 - animals?
 
