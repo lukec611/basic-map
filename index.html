@@ -21,6 +21,7 @@
         <script src="LLA.js"></script>
         <script src="cube.js"></script>
         <script src="desk.js"></script>
+        <script src="person.js"></script>
         <script src="map.js"></script>
         <script>
             const map = new Map({
@@ -43,7 +44,7 @@
                     width: 50,
                 }),
                 new Cube({
-                    x: 7 * 40,
+                    x: 8.6 * 40,
                     y: 5 * 40,
                     colors: 'yellow,turquoise,black'.split(','),
                     text: 'ok,world,then()'.split(','),
@@ -67,6 +68,8 @@
             desk.addToMap(map);
             const desk2 = new Desk(400, 140, '<div style="color:white;padding:4px;">Angus\' Desk</div>');
             desk2.addToMap(map);
+            const person = new Person(20, 20);
+            person.addToMap(map);
 
         </script>
     </body>
