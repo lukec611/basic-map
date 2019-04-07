@@ -19,7 +19,8 @@ class Person {
             height: 10,
             depth: 10,
             colors: ['red', 'blue', 'green'],
-            text: ['', '', '']
+            text: ['', '', ''],
+            backside: true,
         });
         this.cubes['body'] = new Cube({
             x,
@@ -29,7 +30,8 @@ class Person {
             height: 30,
             depth: 16,
             colors: ['red', 'blue', 'green'],
-            text: ['', '', '']
+            text: ['', '', ''],
+            backside: true,
         });
         this.cubes['left arm'] = new Cube({
             x: x + 2.5,
@@ -39,7 +41,8 @@ class Person {
             height: 30,
             depth: 5,
             colors: ['black', 'brown', 'orange'],
-            text: ['', '', '']
+            text: ['', '', ''],
+            backside: true,
         });
         this.cubes['right arm'] = new Cube({
             x: x + 2.5,
@@ -49,7 +52,8 @@ class Person {
             height: 30,
             depth: 5,
             colors: ['black', 'brown', 'orange'],
-            text: ['', '', '']
+            text: ['', '', ''],
+            backside: true,
         });
         this.cubes['left leg'] = new Cube({
             x: x,
@@ -59,7 +63,8 @@ class Person {
             height: 35,
             depth: 5,
             colors: ['purple', 'yellow', 'turquoise'],
-            text: ['', '', '']
+            text: ['', '', ''],
+            backside: true,
         });
         this.cubes['right leg'] = new Cube({
             x: x,
@@ -69,7 +74,8 @@ class Person {
             height: 35,
             depth: 5,
             colors: ['purple', 'yellow', 'turquoise'],
-            text: ['', '', '']
+            text: ['', '', ''],
+            backside: true,
         });
         const container = document.createElement('div');
         container.style.transformStyle = 'preserve-3d';
@@ -84,27 +90,29 @@ class Person {
         this.container = container;
     }
 
+    // i ranges 0-1
+    setWalkAnimationLevel(i = 0, x = 0, y = 0, z = 0, r = 0) {
+        this.x = x;
+        this.y = y;
+        this.container.style.transform = `translate3d(${x}px, ${y}px, ${z}px) rotateZ(${r}deg) `;
+        const la = this.cubes['left arm'].element;
+        const ra = this.cubes['right arm'].element;
+        const ll = this.cubes['left leg'].element;
+        const rl = this.cubes['right leg'].element;
+        var deg = Math.sin(i * 2 * Math.PI) * 8;
+        var degL = Math.sin(i * 2 * Math.PI) * 10;
+        la.style.transform = `rotateY(${deg}deg)`;
+        la.style.transformOrigin = '10px 0px 55px';
+        ra.style.transform = `rotateY(${-deg}deg)`;
+        ra.style.transformOrigin = '10px 0px 55px';
+        ll.style.transform = `rotateY(${-degL}deg)`;
+        ll.style.transformOrigin = '10px 0px 55px';
+        rl.style.transform = `rotateY(${degL}deg)`;
+        rl.style.transformOrigin = '10px 0px 55px';
+    }
+
     
     async addToMap(map) {
         map.addItem(this.container);
-        for(let i = 0; i < 700; i++) {
-            await new Promise(r => setTimeout(r, 10));
-            this.container.style.transform = `translate3d(${i}px, 0, 0) rotateZ(0deg) `;
-            const la = this.cubes['left arm'].element;
-            const ra = this.cubes['right arm'].element;
-            const ll = this.cubes['left leg'].element;
-            const rl = this.cubes['right leg'].element;
-            var deg = Math.sin(i / 4) * 8;
-            var degL = Math.sin(i / 4) * 10;
-            la.style.transform = `rotateY(${deg}deg)`;
-            la.style.transformOrigin = '10px 0px 55px';
-            ra.style.transform = `rotateY(${-deg}deg)`;
-            ra.style.transformOrigin = '10px 0px 55px';
-            ll.style.transform = `rotateY(${-degL}deg)`;
-            ll.style.transformOrigin = '10px 0px 55px';
-            rl.style.transform = `rotateY(${degL}deg)`;
-            rl.style.transformOrigin = '10px 0px 55px';
-        }
-        this.container.style.display = 'none';
     }
 }
