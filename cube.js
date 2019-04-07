@@ -29,6 +29,7 @@ class Cube {
             .forEach(id => this[id] = typeof options[id] === 'number' ? options[id] : DEFAULT_CUBE_OPTIONS[id]);
         'width,height,depth,colors,text'.split(',')
             .forEach(id => this[id] = options[id] || DEFAULT_CUBE_OPTIONS[id]);
+        this.backside = !!options.backside;
     }
 
     createElement() {
@@ -64,18 +65,6 @@ class Cube {
         side.innerHTML = this.text[1];
         
         
-        const backside = document.createElement('div');
-        backside.style.width = `${this.depth}px`;
-        backside.style.height = `${this.height}px`;
-        backside.style.backgroundColor = 'black';
-        backside.style.position = 'absolute';
-        backside.style.top = `${this.y}px`;
-        backside.style.left = `${this.x}px`;
-        backside.style.zIndex = '2000';
-        backside.className = 'desk';
-        backside.style.transform = `translate3d(${0}px, ${0}px, ${this.z}px) rotateZ(90deg) rotateX(90deg)`;
-        backside.style.transformOrigin = '0% 0%';
-
         const front = document.createElement('div');
         front.style.width = `${this.width}px`;
         front.style.height = `${this.height}px`;
@@ -90,24 +79,39 @@ class Cube {
         front.innerHTML = this.text[2];
         front.style.color = 'white';
         
-        const back = document.createElement('div');
-        back.style.width = `${this.width}px`;
-        back.style.height = `${this.height}px`;
-        back.style.backgroundColor = 'darkblue';
-        back.style.position = 'absolute';
-        back.style.top = `${this.y}px`;
-        back.style.left = `${this.x}px`;
-        back.style.zIndex = '2000';
-        back.className = 'desk';
-        back.style.transform = `translate3d(${0}px, ${0}px, ${this.height + this.z}px) rotateX(-90deg)`;
-        back.style.transformOrigin = '0% 0%';
-        
+        if (this.backside) {
+            const backside = document.createElement('div');
+            backside.style.width = `${this.depth}px`;
+            backside.style.height = `${this.height}px`;
+            backside.style.backgroundColor = 'black';
+            backside.style.position = 'absolute';
+            backside.style.top = `${this.y}px`;
+            backside.style.left = `${this.x}px`;
+            backside.style.zIndex = '2000';
+            backside.className = 'desk';
+            backside.style.transform = `translate3d(${0}px, ${0}px, ${this.z}px) rotateZ(90deg) rotateX(90deg)`;
+            backside.style.transformOrigin = '0% 0%';
+
+            const back = document.createElement('div');
+            back.style.width = `${this.width}px`;
+            back.style.height = `${this.height}px`;
+            back.style.backgroundColor = 'darkblue';
+            back.style.position = 'absolute';
+            back.style.top = `${this.y}px`;
+            back.style.left = `${this.x}px`;
+            back.style.zIndex = '2000';
+            back.className = 'desk';
+            back.style.transform = `translate3d(${0}px, ${0}px, ${this.height + this.z}px) rotateX(-90deg)`;
+            back.style.transformOrigin = '0% 0%';
+        } 
         
         container.appendChild(top);
         container.appendChild(side);
-        container.appendChild(backside);
+        if (this.backside) {
+            container.appendChild(backside);
+            container.appendChild(back);
+        }
         container.appendChild(front);
-        container.appendChild(back);
         this.element = container;
         return container;
     }
