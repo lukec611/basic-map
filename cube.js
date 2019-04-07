@@ -79,8 +79,9 @@ class Cube {
         front.innerHTML = this.text[2];
         front.style.color = 'white';
         
+        let backside, back;
         if (this.backside) {
-            const backside = document.createElement('div');
+            backside = document.createElement('div');
             backside.style.width = `${this.depth}px`;
             backside.style.height = `${this.height}px`;
             backside.style.backgroundColor = 'black';
@@ -92,7 +93,7 @@ class Cube {
             backside.style.transform = `translate3d(${0}px, ${0}px, ${this.z}px) rotateZ(90deg) rotateX(90deg)`;
             backside.style.transformOrigin = '0% 0%';
 
-            const back = document.createElement('div');
+            back = document.createElement('div');
             back.style.width = `${this.width}px`;
             back.style.height = `${this.height}px`;
             back.style.backgroundColor = 'darkblue';
