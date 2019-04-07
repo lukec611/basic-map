@@ -71,6 +71,29 @@
             const person = new Person(20, 20);
             person.addToMap(map);
 
+            const rotatingCube = new Cube({
+                x: 8*42,
+                y: 7*42,
+                z: 0,
+                colors: 'red,darkred,blue'.split(','),
+                test: 'yes,no,(m)'.split(','),
+                width: 60,
+                height: 60,
+                depth: 60,
+                backside: true,
+            });
+            rotatingCube.createElement();
+            map.addItem(rotatingCube.element);
+            (async () => {
+                // let i = 0;
+                for(let i = 0; i < 360; i++) {
+                    await new Promise(r => setTimeout(r, 10));
+                    rotatingCube.element.style.transform = `rotateZ(${(i+180)%360}deg)`;
+                    rotatingCube.element.style.transformOrigin = 
+                        `${rotatingCube.x + rotatingCube.width/2}px ${rotatingCube.y + rotatingCube.depth/2}px 0px`;
+                }
+            })();
+
         </script>
     </body>
 </html>
