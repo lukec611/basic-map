@@ -17,6 +17,8 @@ class Person {
         const legThickness = 5;
         const chestSize = 16;
         const armHeight = 30;
+        const armThickness = 5;
+        const armGap = 2.5;
         const legGap = 5;
         
         const halfBodyWidth = bodyWidth * 0.5;
@@ -44,23 +46,23 @@ class Person {
             backside: true,
         });
         this.cubes['left arm'] = new Cube({
-            x: 2.5,
-            y: -7.5,
-            z: 65 - 30,
-            width: 5,
-            height: 30,
-            depth: 5,
+            x: bodyThickness * 0.5 - armThickness * 0.5,
+            y: -armThickness - armGap,
+            z: torsoHeight + legHeight - armHeight,
+            width: armThickness,
+            height: armHeight,
+            depth: armThickness,
             colors: ['black', 'brown', 'orange'],
             text: ['', '', ''],
             backside: true,
         });
         this.cubes['right arm'] = new Cube({
-            x: 2.5,
-            y: 16 + 2.5,
-            z: 65 - 30,
-            width: 5,
-            height: 30,
-            depth: 5,
+            x: bodyThickness * 0.5 - armThickness * 0.5,
+            y: chestSize + armGap,
+            z: torsoHeight + legHeight - armHeight,
+            width: armThickness,
+            height: armHeight,
+            depth: armThickness,
             colors: ['black', 'brown', 'orange'],
             text: ['', '', ''],
             backside: true,
