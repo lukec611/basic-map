@@ -125,7 +125,7 @@
                         };
                         person.setWalkAnimationLevel(wa, newPos.x, newPos.y, 0, angle);
                         anglee = (anglee+1)%360
-                        // person.setWalkAnimationLevel(wa, newPos.x, newPos.y, 0, angle);
+                        // person.setWalkAnimationLevel(wa, 20, 20, 0, anglee);
                         await new Promise(r => setTimeout(r, 10));
                     }
                     singleIteration();
