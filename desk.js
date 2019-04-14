@@ -14,14 +14,19 @@ class Desk {
     }
 
     construct() {
-        const height = 40;
-        const width = 60;
-        const length = 120;
+        const height = 37;
+        const width = 52;
+        const length = 90;
         const woodDepth = 4;
         const colors = [
-            '#703804',
-            '#562b03',
-            '#753d09',
+            '#000000',
+            '#000000',
+            '#000000',
+        ];
+        const topColors = [
+            '#FFFFFF',
+            '#CCCCCC',
+            '#BBBBBB',
         ];
         this.cubes.push(
             // leg btm rht
@@ -68,7 +73,7 @@ class Desk {
             new Cube({
                 x: this.x,
                 y: this.y,
-                colors,
+                colors: topColors,
                 text: [this.owner, '', ''],
                 width,
                 height: woodDepth,

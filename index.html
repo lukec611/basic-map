@@ -35,104 +35,74 @@
             }
 
             const cubes = [
-                new Cube(),
                 new Cube({
                     x: 8 * 42,
-                    y: 13 * 42,
-                    colors: 'yellow,turquoise,lightseagreen'.split(','),
-                    text: 'Luke\'s Cube,,'.split(','),
-                    width: 50,
-                }),
-                new Cube({
-                    x: 8.6 * 40,
-                    y: 5 * 40,
-                    colors: 'yellow,turquoise,black'.split(','),
-                    text: 'ok,world,then()'.split(','),
-                    width: 42*1,
-                    height: 42*2,
-                    depth: 42,
-                }),
-                new Cube({
-                    x: 16 * 40,
-                    y: 18 * 40,
-                    colors: '#90EE90,#4c7f4c,#74bf74'.split(','),
-                    text: 'building,your,future'.split(','),
-                    width: 42*5,
-                    height: 42*2,
-                    depth: 42*4,
+                    y: 8 * 42,
+                    colors: '#00000000,#00000000,#00000000'.split(','),
+                    text: [
+                        `   <div style="width:100%;height:100%;box-sizing: border-box;border:2px solid black;">
+                                Room X.Y.Z
+                            </div>`,
+                        `<div style="border: 4px solid black;width:100%;height:100%;box-sizing: border-box"></div>`,
+                        `<div style="border: 4px solid black;width:100%;height:100%;box-sizing: border-box"></div>`,
+                    ],
+                    width: 200,
+                    height: 90,
                 }),
             ];
             cubes.forEach(cube => map.addItem(cube.createElement()));
 
-            const desk = new Desk(400, 10, '<div style="color:white;padding:4px;">Luke\'s Desk</div>');
+            const desk = new Desk(400, 10, '<div style="padding:4px;font-size:12px">Luke\'s Desk</div>');
             desk.addToMap(map);
-            const desk2 = new Desk(400, 140, '<div style="color:white;padding:4px;">Angus\' Desk</div>');
+            const desk2 = new Desk(400, 110, '<div style="padding:4px;font-size:12px">Angus\' Desk</div>');
             desk2.addToMap(map);
-            const person = new Person(20, 20);
-            person.addToMap(map);
 
-            const rotatingCube = new Cube({
-                x: 8*42,
-                y: 7*42,
-                z: 0,
-                colors: 'red,darkred,blue'.split(','),
-                test: 'yes,no,(m)'.split(','),
-                width: 60,
-                height: 60,
-                depth: 60,
-                backside: true,
-            });
-            rotatingCube.createElement();
-            map.addItem(rotatingCube.element);
-            (async () => {
-                // let i = 0;
-                for(let i = 0; i < 360; i++) {
-                    await new Promise(r => setTimeout(r, 10));
-                    rotatingCube.element.style.transform = `rotateZ(${(i+180)%360}deg)`;
-                    rotatingCube.element.style.transformOrigin = 
-                        `${rotatingCube.x + rotatingCube.width/2}px ${rotatingCube.y + rotatingCube.depth/2}px 0px`;
-                }
-            })();
-
-            async function personRandomWalk() {
-                function randomPlace() {
-                    return {
-                        x: Math.random() * map.width * 40,
-                        y: Math.random() * map.height * 40,
-                    };
-                }
-                async function singleIteration() {
-                    const goal = randomPlace();
-                    const diff = { x: goal.x - person.x, y: goal.y - person.y };
-                    const dist = Math.sqrt(
-                        Math.pow(diff.x, 2)
-                        + Math.pow(diff.y, 2)
-                    );
-                    const steps = {
-                        x: diff.x / dist,
-                        y: diff.y / dist,
-                    };
-                    const angle = Math.atan2(diff.y, diff.x) * 57.3;
-                    console.log(dist, steps, diff);
-                    var anglee = 0;
-                    const iterations = Math.floor(dist / 1);
-                    for(let i = 0, wa = 0; i < iterations; i++, wa += 0.025) {
-                        const newPos = {
-                            x: person.x + steps.x,
-                            y: person.y + steps.y,
-                            // x: 20,
-                            // y: 80,
+            function addAnimatingPerson() {
+                const person = new Person(20, 20);
+                person.addToMap(map);
+                async function personRandomWalk() {
+                    function randomPlace() {
+                        return {
+                            x: Math.random() * map.width * 40,
+                            y: Math.random() * map.height * 40,
                         };
-                        person.setWalkAnimationLevel(wa, newPos.x, newPos.y, 0, angle);
-                        anglee = (anglee+1)%360
-                        // person.setWalkAnimationLevel(wa, 20, 20, 0, anglee);
-                        await new Promise(r => setTimeout(r, 10));
+                    }
+                    async function singleIteration() {
+                        const goal = randomPlace();
+                        const diff = { x: goal.x - person.x, y: goal.y - person.y };
+                        const dist = Math.sqrt(
+                            Math.pow(diff.x, 2)
+                            + Math.pow(diff.y, 2)
+                        );
+                        const steps = {
+                            x: diff.x / dist,
+                            y: diff.y / dist,
+                        };
+                        const angle = Math.atan2(diff.y, diff.x) * 57.3;
+                        console.log(dist, steps, diff);
+                        var anglee = 0;
+                        const iterations = Math.floor(dist / 1);
+                        for(let i = 0, wa = 0; i < iterations; i++, wa += 0.025) {
+                            const newPos = {
+                                x: person.x + steps.x,
+                                y: person.y + steps.y,
+                                // x: 20,
+                                // y: 80,
+                            };
+                            person.setWalkAnimationLevel(wa, newPos.x, newPos.y, 0, angle);
+                            anglee = (anglee+1)%360
+                            // person.setWalkAnimationLevel(wa, 20, 20, 0, anglee);
+                            await new Promise(r => setTimeout(r, 10));
+                        }
+                        singleIteration();
                     }
                     singleIteration();
                 }
-                singleIteration();
+                personRandomWalk();
             }
-            personRandomWalk();
+            const numPeople = 7;
+            for(let i = 0; i < numPeople; i++) addAnimatingPerson();
+
 
         </script>
     </body>

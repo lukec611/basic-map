@@ -8,7 +8,7 @@ const DEFAULT_CUBE_OPTIONS = {
     height: 40,
     depth: 150,
     colors: ['red', 'green', 'blue'],
-    text: ['red', 'green', 'blue'],
+    text: ['', '', ''],
     backside: false,
 };
 
@@ -32,6 +32,15 @@ class Cube {
         this.backside = !!options.backside;
     }
 
+    // index: number 0 - 6
+    getColor(index) {
+        return this.colors[index] || 'black';
+    }
+
+    getText(index) {
+        return this.text[index] || '';
+    }
+
     createElement() {
         const container = document.createElement('div');
         container.style.transformStyle = 'preserve-3d';
@@ -43,8 +52,8 @@ class Cube {
         const top = document.createElement('div');
         top.style.width = `${this.width}px`;
         top.style.height = `${this.depth}px`;
-        top.style.backgroundColor = this.colors[0];
-        top.innerHTML = this.text[0];
+        top.style.backgroundColor = this.getColor(0);
+        top.innerHTML = this.getText(0);
         top.style.position = 'absolute';
         top.style.top = `${this.y}px`;
         top.style.left = `${this.x}px`;
@@ -54,7 +63,7 @@ class Cube {
         const side = document.createElement('div');
         side.style.width = `${this.depth}px`;
         side.style.height = `${this.height}px`;
-        side.style.backgroundColor = this.colors[1];
+        side.style.backgroundColor = this.getColor(1);
         side.style.position = 'absolute';
         side.style.top = `${this.y}px`;
         side.style.left = `${this.x}px`;
@@ -62,13 +71,13 @@ class Cube {
         side.className = 'desk';
         side.style.transform = `translate3d(${this.width}px, ${this.depth}px, ${this.height + this.z}px) rotateZ(-90deg) rotateX(-90deg)`;
         side.style.transformOrigin = '0% 0%';
-        side.innerHTML = this.text[1];
+        side.innerHTML = this.getText(1);
         
         
         const front = document.createElement('div');
         front.style.width = `${this.width}px`;
         front.style.height = `${this.height}px`;
-        front.style.backgroundColor = this.colors[2];
+        front.style.backgroundColor = this.getColor(2);
         front.style.position = 'absolute';
         front.style.top = `${this.y}px`;
         front.style.left = `${this.x}px`;
@@ -76,7 +85,7 @@ class Cube {
         front.className = 'desk';
         front.style.transform = `translate3d(${0}px, ${this.depth}px, ${this.height + this.z}px) rotateX(-90deg)`;
         front.style.transformOrigin = '0% 0%';
-        front.innerHTML = this.text[2];
+        front.innerHTML = this.getText(2);
         front.style.color = 'white';
         
         let backside, back;
@@ -84,7 +93,8 @@ class Cube {
             backside = document.createElement('div');
             backside.style.width = `${this.depth}px`;
             backside.style.height = `${this.height}px`;
-            backside.style.backgroundColor = 'black';
+            backside.style.backgroundColor = this.getColor(3);
+            backside.innerHTML = this.getText(3);
             backside.style.position = 'absolute';
             backside.style.top = `${this.y}px`;
             backside.style.left = `${this.x}px`;
@@ -96,7 +106,8 @@ class Cube {
             back = document.createElement('div');
             back.style.width = `${this.width}px`;
             back.style.height = `${this.height}px`;
-            back.style.backgroundColor = 'darkblue';
+            back.style.backgroundColor = this.getColor(4);
+            back.innerHTML = this.getText(4);
             back.style.position = 'absolute';
             back.style.top = `${this.y}px`;
             back.style.left = `${this.x}px`;

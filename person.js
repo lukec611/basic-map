@@ -38,6 +38,9 @@ class Person {
             halfBodyWidth,
         };
 
+        const colors = ['#000000', '#333333', '#555555', '#666666'];
+        const text = [];
+
         this.cubes.head = new Cube({
             x: 0,
             y:  halfBodyWidth - headSize,
@@ -45,8 +48,8 @@ class Person {
             width: headSize,
             height: headSize,
             depth: headSize,
-            colors: ['red', 'blue', 'green'],
-            text: ['', '', ''],
+            colors,
+            text,
             backside: true,
         });
         this.cubes['body'] = new Cube({
@@ -56,8 +59,8 @@ class Person {
             width: bodyThickness,
             height: torsoHeight,
             depth: chestSize,
-            colors: ['red', 'blue', 'green'],
-            text: ['', '', ''],
+            colors,
+            text,
             backside: true,
         });
         this.cubes['left arm'] = new Cube({
@@ -67,8 +70,8 @@ class Person {
             width: armThickness,
             height: armHeight,
             depth: armThickness,
-            colors: ['black', 'brown', 'orange'],
-            text: ['', '', ''],
+            colors,
+            text,
             backside: true,
         });
         this.cubes['right arm'] = new Cube({
@@ -78,8 +81,8 @@ class Person {
             width: armThickness,
             height: armHeight,
             depth: armThickness,
-            colors: ['black', 'brown', 'orange'],
-            text: ['', '', ''],
+            colors,
+            text,
             backside: true,
         });
         this.cubes['left leg'] = new Cube({
@@ -89,8 +92,8 @@ class Person {
             width: legThickness,
             height: legHeight,
             depth: legThickness,
-            colors: ['green', 'green', 'green'],
-            text: ['', '', ''],
+            colors,
+            text,
             backside: true,
         });
         this.cubes['right leg'] = new Cube({
@@ -100,8 +103,8 @@ class Person {
             width: legThickness,
             height: legHeight,
             depth: legThickness,
-            colors: ['purple', 'yellow', 'turquoise'],
-            text: ['', '', ''],
+            colors,
+            text,
             backside: true,
         });
         const container = document.createElement('div');
