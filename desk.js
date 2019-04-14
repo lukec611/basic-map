@@ -78,7 +78,7 @@ class Desk {
                 width,
                 height: woodDepth,
                 depth: length,
-                z: height,
+                z: height+1,
             }),
         );
     }

@@ -24,6 +24,7 @@ body {
     left: 0;
     transform-style: preserve-3d;
 }
+
 .tile {
     width: 40px;
     height: 40px;
@@ -47,7 +48,7 @@ body {
     left: 0;
     border-bottom: 4px dashed lightseagreen;
 }
-#tool {
+#tool, #tool-2 {
     position: fixed;
     top: 10px;
     left: 10px;
@@ -61,4 +62,8 @@ body {
     justify-content: center;
     align-items: center;
     cursor: pointer;
+}
+
+#tool-2 {
+    top: 90px;
 }

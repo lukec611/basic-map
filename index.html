@@ -12,6 +12,9 @@
         <div id="tool" onclick="toggleDimentions()">
             3D
         </div>
+        <div id="tool-2" onclick="toggleZoom(event)">
+            1x
+        </div>
 
 
         <div id="map-wrapper">
@@ -32,6 +35,17 @@
             function toggleDimentions() {
                 map.toggleView();
                 document.getElementById('tool').innerHTML = map.view.toUpperCase();
+            }
+            function toggleZoom(event) {
+                const options = [10, 5, 2, 1];
+                const index = options.indexOf(map.zoom);
+                const nextIndex = (index + 1) % options.length;
+                const nextOption = options[nextIndex];
+                map.zoom = nextOption;
+                console.log(map.zoom);
+                event.target.innerHTML = `${map.zoom}x`;
+                map.toggleView();
+                map.toggleView();
             }
 
             const cubes = [
@@ -61,14 +75,30 @@
                 const person = new Person(20, 20);
                 person.addToMap(map);
                 async function personRandomWalk() {
+                    const maxDist = 40 * 6;
                     function randomPlace() {
                         return {
                             x: Math.random() * map.width * 40,
                             y: Math.random() * map.height * 40,
                         };
                     }
+                    function randomPlaceNearby() {
+                        const minPlace = {
+                            x: Math.max(person.x - maxDist, 0),
+                            y: Math.max(person.y - maxDist, 0),
+                        };
+                        const maxPlace = {
+                            x: Math.min(person.x + maxDist, map.width * 40),
+                            y: Math.min(person.y + maxDist, map.height * 40),
+                        };
+                        const dist = { x: maxPlace.x - minPlace.x, y: maxPlace.y - minPlace.y };
+                        return {
+                            x: minPlace.x + Math.random() * dist.x,
+                            y: minPlace.y + Math.random() * dist.y,
+                        };
+                    }
                     async function singleIteration() {
-                        const goal = randomPlace();
+                        const goal = randomPlaceNearby();
                         const diff = { x: goal.x - person.x, y: goal.y - person.y };
                         const dist = Math.sqrt(
                             Math.pow(diff.x, 2)
@@ -79,7 +109,6 @@
                             y: diff.y / dist,
                         };
                         const angle = Math.atan2(diff.y, diff.x) * 57.3;
-                        console.log(dist, steps, diff);
                         var anglee = 0;
                         const iterations = Math.floor(dist / 1);
                         for(let i = 0, wa = 0; i < iterations; i++, wa += 0.025) {
