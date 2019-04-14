@@ -114,13 +114,18 @@
                     };
                     const angle = Math.atan2(diff.y, diff.x) * 57.3;
                     console.log(dist, steps, diff);
+                    var anglee = 0;
                     const iterations = Math.floor(dist / 1);
                     for(let i = 0, wa = 0; i < iterations; i++, wa += 0.025) {
                         const newPos = {
                             x: person.x + steps.x,
                             y: person.y + steps.y,
+                            // x: 20,
+                            // y: 80,
                         };
                         person.setWalkAnimationLevel(wa, newPos.x, newPos.y, 0, angle);
+                        anglee = (anglee+1)%360
+                        // person.setWalkAnimationLevel(wa, newPos.x, newPos.y, 0, angle);
                         await new Promise(r => setTimeout(r, 10));
                     }
                     singleIteration();

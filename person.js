@@ -9,33 +9,43 @@ class Person {
     }
 
     construct() {
-        const x = 1;
-        const y = 1;
+        const headSize = 10;
+        const bodyWidth = 26;
+        const bodyThickness = 10;
+        const torsoHeight = 30;
+        const legHeight = 35;
+        const legThickness = 5;
+        const chestSize = 16;
+        const armHeight = 30;
+        const legGap = 5;
+        
+        const halfBodyWidth = bodyWidth * 0.5;
+
         this.cubes.head = new Cube({
-            x: x,
-            y: y + 13 - 10,
-            z: 65,
-            width: 10,
-            height: 10,
-            depth: 10,
+            x: 0,
+            y:  halfBodyWidth - headSize,
+            z: torsoHeight + legHeight,
+            width: headSize,
+            height: headSize,
+            depth: headSize,
             colors: ['red', 'blue', 'green'],
             text: ['', '', ''],
             backside: true,
         });
         this.cubes['body'] = new Cube({
-            x,
-            y,
-            z: 35,
-            width: 10,
-            height: 30,
-            depth: 16,
+            x: 0,
+            y: 0,
+            z: legHeight,
+            width: bodyThickness,
+            height: torsoHeight,
+            depth: chestSize,
             colors: ['red', 'blue', 'green'],
             text: ['', '', ''],
             backside: true,
         });
         this.cubes['left arm'] = new Cube({
-            x: x + 2.5,
-            y: y - 7.5,
+            x: 2.5,
+            y: -7.5,
             z: 65 - 30,
             width: 5,
             height: 30,
@@ -45,8 +55,8 @@ class Person {
             backside: true,
         });
         this.cubes['right arm'] = new Cube({
-            x: x + 2.5,
-            y: y + 16 + 2.5,
+            x: 2.5,
+            y: 16 + 2.5,
             z: 65 - 30,
             width: 5,
             height: 30,
@@ -56,23 +66,23 @@ class Person {
             backside: true,
         });
         this.cubes['left leg'] = new Cube({
-            x: x,
-            y: y - 2,
+            x: legThickness / 2,
+            y: halfBodyWidth - (legThickness + legGap),
             z: 0,
-            width: 5,
-            height: 35,
-            depth: 5,
-            colors: ['purple', 'yellow', 'turquoise'],
+            width: legThickness,
+            height: legHeight,
+            depth: legThickness,
+            colors: ['green', 'green', 'green'],
             text: ['', '', ''],
             backside: true,
         });
         this.cubes['right leg'] = new Cube({
-            x: x,
-            y: y + 8,
+            x: legThickness / 2,
+            y: legThickness + legGap,
             z: 0,
-            width: 5,
-            height: 35,
-            depth: 5,
+            width: legThickness,
+            height: legHeight,
+            depth: legThickness,
             colors: ['purple', 'yellow', 'turquoise'],
             text: ['', '', ''],
             backside: true,
@@ -88,6 +98,7 @@ class Person {
             container.appendChild(this.cubes[key].element);
         });
         this.container = container;
+        this.container.style.transformOrigin = `2.5px 13px 0px`;
     }
 
     // i ranges 0-1
