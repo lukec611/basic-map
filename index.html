@@ -50,27 +50,52 @@
             }
 
             const cubes = [
-                new Cube({
-                    x: 8 * 42,
-                    y: 8 * 42,
-                    colors: '#00000000,#00000000,#00000000'.split(','),
-                    text: [
-                        `   <div style="width:100%;height:100%;box-sizing: border-box;border:2px solid black;">
-                                Room X.Y.Z
-                            </div>`,
-                        `<div style="border: 4px solid black;width:100%;height:100%;box-sizing: border-box"></div>`,
-                        `<div style="border: 4px solid black;width:100%;height:100%;box-sizing: border-box"></div>`,
-                    ],
-                    width: 200,
-                    height: 90,
-                }),
+                // new Cube({
+                //     x: 8 * 42,
+                //     y: 8 * 42,
+                //     colors: '#00000000,#00000000,#00000000'.split(','),
+                //     text: [
+                //         `   <div style="width:100%;height:100%;box-sizing: border-box;border:2px solid black;">
+                //                 Room X.Y.Z
+                //             </div>`,
+                //         `<div style="border: 4px solid black;width:100%;height:100%;box-sizing: border-box"></div>`,
+                //         `<div style="border: 4px solid black;width:100%;height:100%;box-sizing: border-box"></div>`,
+                //     ],
+                //     width: 200,
+                //     height: 90,
+                // }),
             ];
+            Office.forEach(item => {
+                if (item.type === 'desk') {
+                    console.log('drawing a desk');
+                    const desk = new Desk(item.x * 60, item.y * 55, item.letter, item.horiz);
+                    desk.addToMap(map);
+                } else {
+                    const cube = new Cube({
+                        x: item.x * 60,
+                        y: item.y * 55,
+                        colors: '#00000000,#00000000,#00000000'.split(','),
+                        text: [
+                            `   <div style="width:100%;height:100%;box-sizing: border-box;border:2px solid black;">
+                                    ${item.letter}
+                                </div>`,
+                            `<div style="border: 4px solid black;width:100%;height:100%;box-sizing: border-box"></div>`,
+                            `<div style="border: 4px solid black;width:100%;height:100%;box-sizing: border-box"></div>`,
+                        ],
+                        width: item.width * 60,
+                        depth: item.height * 55,
+                        height: 90,
+                    });
+                    cubes.push(cube);
+                }
+            });
             cubes.forEach(cube => map.addItem(cube.createElement()));
 
-            const desk = new Desk(400, 10, '<div style="padding:4px;font-size:12px">Luke\'s Desk</div>');
-            desk.addToMap(map);
-            const desk2 = new Desk(400, 110, '<div style="padding:4px;font-size:12px">Angus\' Desk</div>');
-            desk2.addToMap(map);
+
+            // const desk = new Desk(400, 10, '<div style="padding:4px;font-size:12px">Luke\'s Desk</div>');
+            // desk.addToMap(map);
+            // const desk2 = new Desk(400, 110, '<div style="padding:4px;font-size:12px">Angus\' Desk</div>');
+            // desk2.addToMap(map);
 
             function addAnimatingPerson() {
                 const person = new Person(20, 20);

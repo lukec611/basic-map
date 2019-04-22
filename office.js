@@ -2,20 +2,21 @@
 const Office = (function () {
     const officeHashMap = `
     |                                                    |
-    | a b c d     el   pt   xB   FK                      |
+    | a b c d     el  pt   xB   FK                       |
     | f g h i                                            |
-    |             ^m   qu   yC   GL    P    QQQQ         |
-    |                                  P    QQQQ         |
-    | R S T U     jn   rv   zD   HM    P    QQQQ         |
-    | V W X Y                          P                 |
-    |             ko   sw   AE   IN    P                 |
-    |                                  P                 |
-    | Z { } [                    JO                      |
-    | \ ] | /                                            |
+    |             ^m  qu   yC   GL    P    QQQQ          |
+    |                                 P    QQQQ          |
+    | R S T U     jn  rv   zD   HM    P    QQQQ          |
+    | V W X Y                         P                  |
+    |             ko  sw   AE   IN    P                  |
+    |                                 P                  |
+    | Z { } [                   JO                       |
+    | = ] ; /                                            |
     |                                                    |
     |             %%%% &&&& ----                         |
     | ! @ # $     %%%% &&&& ----                         |
     |             %%%% &&&& ----                         |`;
+    const horizontalDesksMap = new Map('abcdfghiRSTUVWXYZ{}[]=/;!@#$'.split('').map(x => [x, true]));
     const lines = officeHashMap.split('\n').slice(1);
     const items = new Map();
 
@@ -41,7 +42,7 @@ const Office = (function () {
                         });
                     }
                 } else {
-                    items.set(letter, { x, y, type: 'desk', letter });
+                    items.set(letter, { x, y, type: 'desk', letter, horiz: horizontalDesksMap.has(letter) });
                 }
             }
         }

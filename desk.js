@@ -5,18 +5,24 @@ class Desk {
     // x: number - x pos of desk
     // y: number - y pos of desk
     // owner: string - the owner of the desk
-    constructor(x, y, owner) {
+    // horizontal: boolean - true if the desk is horizontal
+    constructor(x, y, owner, horizontal = false) {
         this.x = x;
         this.y = y;
         this.owner = owner;
         this.cubes = [];
+        this.horizontal = horizontal;
         this.construct();
     }
 
     construct() {
         const height = 37;
-        const width = 52;
-        const length = 90;
+        let width = 50;
+        let length = 95;
+        if (this.horizontal) {
+            width = 95;
+            length = 50;
+        }
         const woodDepth = 4;
         const colors = [
             '#000000',
