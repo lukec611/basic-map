@@ -6,7 +6,7 @@ const DEFAULT_MAP_OPTIONS = {
     rootSelector: 'body',
 };
 
-class Map {
+class LMap {
     /*
         options: {
             width?: number;
@@ -54,7 +54,7 @@ class Map {
 
     toggleView() {
         this.view = this.view === '2d' ? '3d' : '2d';
-        this.mapContainer.style.transform = Map.computeCssMatrix3d(this.view, this.zoom);
+        this.mapContainer.style.transform = LMap.computeCssMatrix3d(this.view, this.zoom);
         // this.mapContainer.style.top = this.view === '2d'
         //     ? '0px'
         //     : '200px';
