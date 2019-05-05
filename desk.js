@@ -80,13 +80,21 @@ class Desk {
                 x: this.x,
                 y: this.y,
                 colors: topColors,
-                text: [this.owner, '', ''],
+                text: [`<div style="border:1px solid black;width:100%;height:100%">${this.owner}</div>`, '', ''],
                 width,
                 height: woodDepth,
                 depth: length,
                 z: height+1,
             }),
         );
+    }
+
+    getBoundingBox() {
+        if (!this._bbox) {
+            const bbox = this.cubes[0].getBoundingBox();
+            this._bbox = this.cubes.reduce((p, c) => Bbox.add(p, c.getBoundingBox()), bbox);
+        }
+        return this._bbox;
     }
 
     get elements() {

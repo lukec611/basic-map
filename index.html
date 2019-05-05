@@ -22,16 +22,18 @@
             </div>
         </div>
         <script src="LLA.js"></script>
+        <script src="Bbox.js"></script>
         <script src="cube.js"></script>
         <script src="desk.js"></script>
         <script src="person.js"></script>
+        <script src="NavigatingPerson.js"></script>
         <script src="map.js"></script>
         <script src="office.js"></script>
         <script>
             const map = new LMap({
                 rootSelector: '#map-wrapper',
-                width: 25,
-                height: 21,
+                width: 65,
+                height: 26,
             });
             function toggleDimentions() {
                 map.toggleView();
@@ -48,6 +50,8 @@
                 map.toggleView();
                 map.toggleView();
             }
+
+            const objList = [];
 
             const cubes = [
                 // new Cube({
@@ -68,25 +72,27 @@
             Office.forEach(item => {
                 if (item.type === 'desk') {
                     console.log('drawing a desk');
-                    const desk = new Desk(item.x * 60, item.y * 55, item.letter, item.horiz);
+                    const desk = new Desk(item.x * 60 + 60, item.y * 55 + 55, item.letter, item.horiz);
                     desk.addToMap(map);
+                    objList.push(desk);
                 } else {
                     const cube = new Cube({
-                        x: item.x * 60,
-                        y: item.y * 55,
+                        x: (item.x) * 60 + 60,
+                        y: (item.y) * 55 + 55,
                         colors: '#00000000,#00000000,#00000000'.split(','),
                         text: [
-                            `   <div style="width:100%;height:100%;box-sizing: border-box;border:2px solid black;">
+                            `   <div style="width:100%;height:100%;box-sizing: border-box;border:2px solid black;background-color:white;">
                                     ${item.letter}
                                 </div>`,
-                            `<div style="border: 4px solid black;width:100%;height:100%;box-sizing: border-box"></div>`,
-                            `<div style="border: 4px solid black;width:100%;height:100%;box-sizing: border-box"></div>`,
+                            `<div style="border: 4px solid black;width:100%;height:100%;box-sizing: border-box; background-color:white;"></div>`,
+                            `<div style="border: 4px solid black;width:100%;height:100%;box-sizing: border-box; background-color:white;"></div>`,
                         ],
                         width: item.width * 60,
                         depth: item.height * 55,
                         height: 90,
                     });
                     cubes.push(cube);
+                    objList.push(cube);
                 }
             });
             cubes.forEach(cube => map.addItem(cube.createElement()));
@@ -96,9 +102,27 @@
             // desk.addToMap(map);
             // const desk2 = new Desk(400, 110, '<div style="padding:4px;font-size:12px">Angus\' Desk</div>');
             // desk2.addToMap(map);
+            function bbTouchesAnyThing(bb) {
+                return cubes.some(c => c.getBoundingBox().intersectsWith(bb));
+            }
+
+            function getRandomPerson() {
+                const rp = () => [Math.random() * map.width * map.tileSize, Math.random() * map.height * map.tileSize];
+                while(true) {
+                    const p = rp();
+                    const bb = new Bbox(p[0]-15, p[1]-15, 30, 30);
+                    if (!bbTouchesAnyThing(bb)) return new Person(p[0], p[1]);
+                }
+                const p = rp();
+                return new Person(p[0], p[1]);
+            }
 
             function addAnimatingPerson() {
-                const person = new Person(20, 20);
+                const pos = getRandomPlaceOnMap(new Person(0, 0), map, cubes);
+                const person = new Person(pos.x, pos.y);
+
+
+
                 person.addToMap(map);
                 async function personRandomWalk() {
                     const maxDist = 40 * 6;
@@ -156,9 +180,69 @@
                 personRandomWalk();
             }
             const numPeople = 7;
-            for(let i = 0; i < numPeople; i++) addAnimatingPerson();
+            // for(let i = 0; i < numPeople; i++) addAnimatingPerson();
 
 
+            function addAnimX() {
+                // return;
+                const start = getRandomPlaceOnMap(new Person(20, 20), map, objList);
+                const goal = getRandomPlaceOnMap(new Person(20, 20), map, objList);
+                const p = new Person(0, 0);
+                p.setWalkAnimationLevel(0, start.x, start.y)
+                p.addToMap(map);
+                const navP = new NavigatingPerson(p, map, objList);
+                setTimeout(function llo() {
+                    navP.step(1);
+                    setTimeout(llo, 30);   
+                }, 30);
+
+                const p2 = { x: -2, y: 808 };
+                const b2 = new Bbox(p2.x-15, p2.y-15, 30, 30);
+                console.log(b2.within(map.getBoundingBox()));
+                console.log('b2', b2);
+                console.log('map:', map.getBoundingBox());
+                // console.log('start', start);
+                // console.log('goal', goal);
+
+                // const Planner = navP.constructPlan(goal);
+                // function llp() {
+                //     const res = Planner.next();
+                //     if (res.done) {
+                //         console.log(res.value);
+                //         return;
+                //     } else if (res.value % 1000 === 0) {
+                //         console.log(res.value);
+                //     }
+                //     setTimeout(llp, 20); 
+                // }
+                // llp();
+            }
+            for(let i = 0; i < numPeople; i++) addAnimX();
+
+
+            const dummy = new Person(0, 0);
+            dummy.setWalkAnimationLevel(0, 1 * map.tileSize, 3 * map.tileSize, 0, 0);
+            dummy.addToMap(map);
+            const navDummy = new NavigatingPerson(dummy, map, objList);
+            navDummy.startPlanTo({ x: 17 * map.tileSize, y: 6 * map.tileSize });
+            // setInterval(() => {
+            //     navDummy.step();
+            // }, 30)
+            const bb = new Bbox(17*map.tileSize, 6*map.tileSize, map.tileSize, map.tileSize);
+            console.log(bb.intersectsWithAnyObject(objList));
+            // let aan = 0;
+            // function spinner() {
+            //     aan += 2;
+            //     aan %= 360;
+            //     dummy.setWalkAnimationLevel(0,
+            //         1.5  * map.tileSize,
+            //         3.5 * map.tileSize,
+            //         0,
+            //         aan,
+            //     );
+            //     setTimeout(spinner, 30);
+            // }
+            // spinner();
         </script>
     </body>
 </html>

@@ -107,6 +107,10 @@ class Person {
             text,
             backside: true,
         });
+        for (let cuKey in this.cubes) {
+            const cube = this.cubes[cuKey];
+            cube.x -= bodyThickness / 2;
+        }
         const container = document.createElement('div');
         container.style.transformStyle = 'preserve-3d';
         container.style.transform = 'translate3d(0, 0, 0)';
@@ -118,7 +122,10 @@ class Person {
             container.appendChild(this.cubes[key].element);
         });
         this.container = container;
-        this.container.style.transformOrigin = `${bodyThickness/2}px ${bodyWidth/2}px 0px`;
+        this.container.style.backgroundColor = 'red';
+        this.container.classList.add('person');
+        // this.container.style.transformOrigin = `0px 0px 0px`;
+        this.container.style.transformOrigin = `0px 8px 0px`;
     }
 
     // i ranges 0-1
@@ -141,6 +148,11 @@ class Person {
         ll.style.transformOrigin = `${this.dimensions.bodyThickness/2}px 0px ${this.dimensions.legHeight}px`;
         rl.style.transform = `rotateY(${degL}deg)`;
         rl.style.transformOrigin = `${this.dimensions.bodyThickness/2}px 0px ${this.dimensions.legHeight}px`;
+    }
+
+    getBoundingBox() {
+        const w = this.dimensions.bodyWidth;
+        return new Bbox(this.x - w*0.5, this.y - w*0.5, w, w);
     }
 
     

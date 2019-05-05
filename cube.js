@@ -41,6 +41,11 @@ class Cube {
         return this.text[index] || '';
     }
 
+    getBoundingBox() {
+        if (!this._bbox) this._bbox = new Bbox(this.x, this.y, this.width, this.depth);
+        return this._bbox;
+    }
+
     createElement() {
         const container = document.createElement('div');
         container.style.transformStyle = 'preserve-3d';

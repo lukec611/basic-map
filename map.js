@@ -27,6 +27,10 @@ class LMap {
         this.toggleView();
     }
 
+    getBoundingBox() {
+        return new Bbox(0, 0, this.width * this.tileSize, this.height * this.tileSize);
+    }
+
     _initialiseMap() {
         const root = document.querySelector(this.rootSelector);
         this.mapContainer = document.createElement('div');
