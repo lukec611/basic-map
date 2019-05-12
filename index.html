@@ -88,8 +88,7 @@
             });
             cubes.forEach(cube => map.addItem(cube.createElement()));
             function createAnimatedPerson() {
-                const start = getRandomPlaceOnMap(new Person(20, 20), map, objList);
-                const goal = getRandomPlaceOnMap(new Person(20, 20), map, objList);
+                const start = getRandomPlaceOnMap(map.getBoundingBox(), objList);
                 const person = new Person(0, 0);
                 person.setWalkAnimationLevel(0, start.x, start.y)
                 person.addToMap(map);

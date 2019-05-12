@@ -1,35 +1,38 @@
 
-
-function getRandomPlaceOnMap(person, map, objList) {
-    const getRandomPosition = () => ({ x: Math.floor(Math.random() * map.width * map.height), y: Math.floor(Math.random() * map.height * map.tileSize) });
-    const maxIt = 100;
-    const personBbox = person.getBoundingBox();
-    const mapBB = map.getBoundingBox();
-    for (let i = 0; i < maxIt; i++) {
-        const p = getRandomPosition();
-        const pBox = new Bbox(p.x - 15, p.y - 15, 30, 30);
-        if (!pBox.within(mapBB)) continue;
-        if (!pBox.intersectsWithAnyObject(objList)) return p;
+class RandomUtility {
+    /**
+     * @desc returns a random number between a and b
+     * @note a is assumed to be less than b
+     * @param {number} a
+     * @param {number} b 
+     * @returns {number}
+     */
+    static randomIntBetween(a, b) {
+        return Math.floor(Math.random() * (b - a) + a);
     }
-    return undefined;
 }
-function getRandomPlaceOnMapFromPos(person, map, objList, dist = 100) {
+
+/**
+ * @desc returns a random position on the map
+ * @param {Bbox} map 
+ * @param {Array<{ getBoundingBox(): Bbox }>} staticObjects 
+ * @param {number} maxIterations - the maximum number of times to loop through trying to randomly
+ * generate a position
+ * @returns {{ x: number, y: number} | undefined}
+ */
+function getRandomPlaceOnMap(map, staticObjects, maxIterations = 100) {
     const getRandomPosition = () => ({
-        x: Math.floor(person.x + Math.random() * 2 * dist - dist),
-        y: Math.floor(person.y + Math.random() * 2 * dist - dist),
+        x: RandomUtility.randomIntBetween(map.x, map.x + map.w),
+        y: RandomUtility.randomIntBetween(map.x, map.x + map.h),
     });
-    const maxIt = 100;
-    const personBbox = person.getBoundingBox();
-    const mapBB = map.getBoundingBox();
-    for (let i = 0; i < maxIt; i++) {
-        const p = getRandomPosition();
-        const pBox = new Bbox(p.x - 15, p.y - 15, 30, 30);
-        if (!pBox.within(mapBB)) continue;
-        if (!pBox.intersectsWithAnyObject(objList)) return p;
+    for (let i = 0; i < maxIterations; i++) {
+        const position = getRandomPosition();
+        const pBox = new Bbox(position.x - 15, position.y - 15, 30, 30);
+        if (!pBox.within(map)) continue;
+        if (!pBox.intersectsWithAnyObject(staticObjects)) return position;
     }
     return undefined;
 }
-
 /*
     type PlanDetail = {
         moveToX: number;
@@ -74,8 +77,7 @@ class NavigatingPerson {
         const plan = this.plan;
         // console.log(plan.type, this.objList.length);
         if (plan.type === 'none') {
-            // const goal = getRandomPlaceOnMapFromPos(this.person, this.map, this.objList, 500);
-            const goal = getRandomPlaceOnMap(this.person, this.map, this.objList, 500);
+            const goal = getRandomPlaceOnMap(this.map.getBoundingBox(), this.objList, 500);
             if (!goal) return;
             // console.log('goal', goal, ' dist ', new LV2(goal.x, goal.y).dist(this.person));
             if (!goal) return;
