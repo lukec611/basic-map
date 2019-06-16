@@ -2,10 +2,13 @@
 
 
 class Desk {
-    // x: number - x pos of desk
-    // y: number - y pos of desk
-    // owner: string - the owner of the desk
-    // horizontal: boolean - true if the desk is horizontal
+    /**
+     * @constructor
+     * @param {number} x 
+     * @param {number} y 
+     * @param {string} owner - a name written on the desk (the owner)
+     * @param {string} horizontal 
+     */
     constructor(x, y, owner, horizontal = false) {
         this.x = x;
         this.y = y;
@@ -89,6 +92,9 @@ class Desk {
         );
     }
 
+    /**
+     * @returns {Bbox}
+     */
     getBoundingBox() {
         if (!this._bbox) {
             const bbox = this.cubes[0].getBoundingBox();
