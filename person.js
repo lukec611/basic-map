@@ -168,7 +168,7 @@ class Person {
      * @returns {Bbox}
      */
     static createBoundingBox(x, y) {
-        const maxBodySize = 30
+        const maxBodySize = 30;
         const halfBodySize = 15;
         return new Bbox(x - halfBodySize, y - halfBodySize, maxBodySize, maxBodySize);
     }

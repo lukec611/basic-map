@@ -1,35 +1,26 @@
-
-const DEFAULT_CUBE_OPTIONS = {
-    x: 0,
-    y: 9 * 42,
-    z: 0,
-    tileSize: 1,
-    width: 100,
-    height: 40,
-    depth: 150,
-    colors: ['red', 'green', 'blue'],
-    text: ['', '', ''],
-    backside: false,
-};
-
 class Cube {
-    /*
-    options: {
-        x: number;
-        y: number;
-        width: number;
-        height: number;
-        depth: number;
-        colors: [string, string, string];
-        text: [string, string, string];
-    }
-    */
-    constructor(options = {}) {
-        'x,y,z'.split(',')
-            .forEach(id => this[id] = typeof options[id] === 'number' ? options[id] : DEFAULT_CUBE_OPTIONS[id]);
-        'width,height,depth,colors,text'.split(',')
-            .forEach(id => this[id] = options[id] || DEFAULT_CUBE_OPTIONS[id]);
-        this.backside = !!options.backside;
+    constructor({
+        x = 0,
+        y = 9 * 42,
+        z = 0,
+        tileSize = 1,
+        width = 100,
+        height = 40,
+        depth = 150,
+        colors = ['red', 'green', 'blue'],
+        text = ['', '', ''],
+        backside = false,
+    }) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.tileSize = tileSize;
+        this.width = width;
+        this.height = height;
+        this.depth = depth;
+        this.colors = colors;
+        this.text = text;
+        this.backside = backside;
     }
 
     // index: number 0 - 6
@@ -120,14 +111,12 @@ class Cube {
             back.className = 'desk';
             back.style.transform = `translate3d(${0}px, ${0}px, ${this.height + this.z}px) rotateX(-90deg)`;
             back.style.transformOrigin = '0% 0%';
+            container.appendChild(backside);
+            container.appendChild(back);
         } 
         
         container.appendChild(top);
         container.appendChild(side);
-        if (this.backside) {
-            container.appendChild(backside);
-            container.appendChild(back);
-        }
         container.appendChild(front);
         this.element = container;
         return container;

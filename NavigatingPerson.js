@@ -127,7 +127,7 @@ class NavigatingPerson {
         let tries = 0;
         while(stack.length) {
             for(let i = 0; i < iterationAttempts && stack.length; i++) {
-                const stepSize = 4;
+                const stepSize = 2;
                 // get nextState from stack
                 const current = stack.shift();
                 // recordState(current);
