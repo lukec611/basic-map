@@ -1,21 +1,25 @@
 class LMap {
-    
+
     constructor({
         width = 25,
         height = 25,
         tileSize = 40,
         rootSelector = 'body',
+        view = '2d',
     }) {
         this.width = width;
         this.height = height;
         this.tileSize = tileSize;
         this.rootSelector = rootSelector;
-        this.view = '2d';
+        this.view = view;
         this.zoom = 10;
         this._initialiseMap();
         this.toggleView();
     }
 
+    /**
+     * @returns {Bbox}
+     */
     getBoundingBox() {
         return new Bbox(0, 0, this.width * this.tileSize, this.height * this.tileSize);
     }
@@ -33,9 +37,12 @@ class LMap {
                 tile.id = `tile${x}-${y}`;
                 tile.className = 'tile';
                 this.mapContainer.appendChild(tile);
-                tile.onclick = () => {
+                tile.onclick = async () => {
                     tile.style.backgroundColor = 'lightseagreen';
                     tile.innerHTML = `(${x}, ${y})`;
+                    await new Promise(r => setTimeout(r, 2500));
+                    tile.innerHTML = '';
+                    tile.style.backgroundColor = 'initial';
                 };
             }
         }
@@ -45,19 +52,26 @@ class LMap {
         this.mapContainer.appendChild(element);
     }
 
-    toggleView() {
-        this.view = this.view === '2d' ? '3d' : '2d';
+    /**
+     * sets the view style
+     * @param {'2d' | '3d'} newView 
+     */
+    setView(newView = '3d') {
+        this.view = newView;
         this.mapContainer.style.transform = LMap.computeCssMatrix3d(this.view, this.zoom);
-        // this.mapContainer.style.top = this.view === '2d'
-        //     ? '0px'
-        //     : '200px';
-        // this.mapContainer.style.left = this.view === '2d'
-        //     ? '0px'
-        //     : '450px';
     }
 
-    // type: '2d' | '3d'
-    static computeCssMatrix3d(type, zoom) {
+    toggleView() {
+        const newView = this.view === '2d' ? '3d' : '2d';
+        this.setView(newView);
+    }
+
+    /**
+     * @desc computes a css matrix for the map
+     * @param {'2d' | '3d'} type 
+     * @param {number} zoom - how "zoomed-in" the map is 
+     */
+    static computeCssMatrix3d(type = '3d', zoom = 10) {
         if (type !== '3d') {
             return ` scale(${zoom / 10})`;
         }
