@@ -1,26 +1,15 @@
-
-const DEFAULT_MAP_OPTIONS = {
-    width: 25,
-    height: 25,
-    tileSize: 40,
-    rootSelector: 'body',
-};
-
 class LMap {
-    /*
-        options: {
-            width?: number;
-            height?: number;
-            tileSize?: number,
-            rootSelector?: string
-        }
-
-    */
-    constructor(options) {
-        this.width = options.width  || DEFAULT_MAP_OPTIONS.width;
-        this.height = options.height  || DEFAULT_MAP_OPTIONS.height;
-        this.tileSize = options.tileSize  || DEFAULT_MAP_OPTIONS.tileSize;
-        this.rootSelector = options.rootSelector  || DEFAULT_MAP_OPTIONS.rootSelector;
+    
+    constructor({
+        width = 25,
+        height = 25,
+        tileSize = 40,
+        rootSelector = 'body',
+    }) {
+        this.width = width;
+        this.height = height;
+        this.tileSize = tileSize;
+        this.rootSelector = rootSelector;
         this.view = '2d';
         this.zoom = 10;
         this._initialiseMap();
