@@ -100,7 +100,12 @@ class NavigatingPerson {
             const done = !plan.steps.length;
             if (!done) {
                 const step = plan.steps.shift();
-                this.person.setWalkAnimationLevel(this._t, step.moveToX, step.moveToY, 0, step.facingAngle);
+                this.person.setRenderConfiguration({
+                    x: step.moveToX,
+                    y: step.moveToY,
+                    walkingFrameDelta: this._t,
+                    directionAngle: step.facingAngle,
+                });
                 this._t += 0.1;
             } else {
                 this.plan = { type: 'none' };

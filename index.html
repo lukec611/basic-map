@@ -90,7 +90,7 @@
             function createAnimatedPerson() {
                 const start = getRandomPersonLocationOnMap(map.getBoundingBox(), objList);
                 const person = new Person(0, 0);
-                person.setWalkAnimationLevel(0, start.x, start.y)
+                person.setRenderConfiguration({ x: start.x, y: start.y });
                 person.addToMap(map);
                 const navP = new NavigatingPerson(person, map, objList);
                 return navP;

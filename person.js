@@ -128,17 +128,32 @@ class Person {
         this.container.style.transformOrigin = `0px 8px 0px`;
     }
 
-    // i ranges 0-1
-    setWalkAnimationLevel(i = 0, x = 0, y = 0, z = 0, r = 0) {
+    /**
+     * 
+     * @param {object} opt 
+     * @param {number} opt.x - the x position
+     * @param {number} opt.y - the y position
+     * @param {number} opt.y - the y position
+     * @param {number} opt.walkingFrameDelta - 0-1, the walking animation frame
+     * @param {number} opt.directionAngle - the angle in degrees the person is facing
+     */
+    setRenderConfiguration({
+        x = 0,
+        y = 0,
+        z = 0,
+        walkingFrameDelta = 0,
+        directionAngle = 0,
+    }) {
         this.x = x;
         this.y = y;
-        this.container.style.transform = `translate3d(${x}px, ${y}px, ${z}px) rotateZ(${r}deg) `;
+        this.container.style.transform = `translate3d(${x}px, ${y}px, ${z}px) rotateZ(${directionAngle}deg) `;
         const la = this.cubes['left arm'].element;
         const ra = this.cubes['right arm'].element;
         const ll = this.cubes['left leg'].element;
         const rl = this.cubes['right leg'].element;
-        var deg = Math.sin(i * 2 * Math.PI) * 8;
-        var degL = Math.sin(i * 2 * Math.PI) * 10;
+
+        var deg = Math.sin(walkingFrameDelta * 2 * Math.PI) * 8;
+        var degL = Math.sin(walkingFrameDelta * 2 * Math.PI) * 10;
         la.style.transform = `rotateY(${deg}deg)`;
         const neckHeight = this.dimensions.legHeight + this.dimensions.torsoHeight;
         la.style.transformOrigin = `${this.dimensions.bodyThickness/2}px 0px ${neckHeight}px`;
