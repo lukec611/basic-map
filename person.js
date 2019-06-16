@@ -159,4 +159,17 @@ class Person {
     async addToMap(map) {
         map.addItem(this.container);
     }
+
+    /**
+     * creates a bounding box, of a person's dimensions
+     * given a center point
+     * @param {number} x - x loc of person
+     * @param {number} y - y loc of person
+     * @returns {Bbox}
+     */
+    static createBoundingBox(x, y) {
+        const maxBodySize = 30
+        const halfBodySize = 15;
+        return new Bbox(x - halfBodySize, y - halfBodySize, maxBodySize, maxBodySize);
+    }
 }

@@ -88,7 +88,7 @@
             });
             cubes.forEach(cube => map.addItem(cube.createElement()));
             function createAnimatedPerson() {
-                const start = getRandomPlaceOnMap(map.getBoundingBox(), objList);
+                const start = getRandomPersonLocationOnMap(map.getBoundingBox(), objList);
                 const person = new Person(0, 0);
                 person.setWalkAnimationLevel(0, start.x, start.y)
                 person.addToMap(map);
@@ -98,7 +98,7 @@
             const navigatingPeople = Array.from({ length: 20 }, () => createAnimatedPerson());
             setInterval(() => {
                 navigatingPeople.forEach(person => person.step(1));
-            }, 40);
+            }, 20);
         </script>
     </body>
 </html>

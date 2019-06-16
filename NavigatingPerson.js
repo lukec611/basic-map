@@ -20,16 +20,16 @@ class RandomUtility {
  * generate a position
  * @returns {{ x: number, y: number} | undefined}
  */
-function getRandomPlaceOnMap(map, staticObjects, maxIterations = 100) {
+function getRandomPersonLocationOnMap(map, staticObjects, maxIterations = 100) {
     const getRandomPosition = () => ({
         x: RandomUtility.randomIntBetween(map.x, map.x + map.w),
         y: RandomUtility.randomIntBetween(map.x, map.x + map.h),
     });
     for (let i = 0; i < maxIterations; i++) {
         const position = getRandomPosition();
-        const pBox = new Bbox(position.x - 15, position.y - 15, 30, 30);
-        if (!pBox.within(map)) continue;
-        if (!pBox.intersectsWithAnyObject(staticObjects)) return position;
+        const boundingBox = Person.createBoundingBox(position.x, position.y);
+        if (!boundingBox.within(map)) continue;
+        if (!boundingBox.intersectsWithAnyObject(staticObjects)) return position;
     }
     return undefined;
 }
@@ -54,11 +54,11 @@ class NavigatingPerson {
 
     getSurroundingPositions(x, y, stepSize) {
         return [
-            { x: x + stepSize, y: y + 0, angle: 0 },
+            { x: x + stepSize, y, angle: 0 },
             { x: x + stepSize, y: y + stepSize, angle: 45 },
-            { x: x + 0, y: y + stepSize, angle: 90 },
+            { x, y: y + stepSize, angle: 90 },
             { x: x - stepSize, y: y + stepSize, angle: 135 },
-            { x: x - stepSize, y: y + 0, angle: 180 },
+            { x: x - stepSize, y, angle: 180 },
             { x: x - stepSize, y: y - stepSize, angle: 225 },
             { x, y: y - stepSize, angle: 270 },
             { x: x + stepSize, y: y - stepSize, angle: 315 },
@@ -77,9 +77,7 @@ class NavigatingPerson {
         const plan = this.plan;
         // console.log(plan.type, this.objList.length);
         if (plan.type === 'none') {
-            const goal = getRandomPlaceOnMap(this.map.getBoundingBox(), this.objList, 500);
-            if (!goal) return;
-            // console.log('goal', goal, ' dist ', new LV2(goal.x, goal.y).dist(this.person));
+            const goal = getRandomPersonLocationOnMap(this.map.getBoundingBox(), this.objList, 500);
             if (!goal) return;
             this.plan = {
                 type: 'partial',
@@ -120,7 +118,6 @@ class NavigatingPerson {
         };
         start.dist = goalPos.dist(start);
         const stack = [start];
-        const currentPersonBbox = this.person.getBoundingBox();
         const visited = new Map([[`${start.x},${start.y}`, true]]);
         function recordState(state) {
             const key = `${state.x},${state.y}`;
@@ -130,7 +127,7 @@ class NavigatingPerson {
         let tries = 0;
         while(stack.length) {
             for(let i = 0; i < iterationAttempts && stack.length; i++) {
-                const stepSize = 2;
+                const stepSize = 4;
                 // get nextState from stack
                 const current = stack.shift();
                 // recordState(current);
@@ -164,10 +161,8 @@ class NavigatingPerson {
                         state.key = key;
                         if (visited.has(key)) return false;
                         state.dist = goalPos.dist(state);
-                        const bbox = new Bbox(state.x-15, state.y-15, 30, 30);
+                        const bbox = Person.createBoundingBox(state.x, state.y);
                         if (!bbox.within(this.map.getBoundingBox())) return false;
-                        // if (state.dist >= start.dist + 100) return false;
-                        // return true;
                         return !bbox.intersectsWithAnyObject(this.objList);
                     })
                     .map(state => {
