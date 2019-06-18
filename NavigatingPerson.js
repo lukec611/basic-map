@@ -44,6 +44,12 @@ function getRandomPersonLocationOnMap(map, staticObjects, maxIterations = 100) {
 */
 
 class NavigatingPerson {
+    /**
+     * @constructor
+     * @param {Person} person 
+     * @param {LMap} map 
+     * @param {Array<{ getBoudningBox(): Bbox }>} objList 
+     */
     constructor(person, map, objList) {
         this.person = person;
         this.map = map;
@@ -75,7 +81,6 @@ class NavigatingPerson {
 
     step(dt) {
         const plan = this.plan;
-        // console.log(plan.type, this.objList.length);
         if (plan.type === 'none') {
             const goal = getRandomPersonLocationOnMap(this.map.getBoundingBox(), this.objList, 500);
             if (!goal) return;
@@ -94,7 +99,6 @@ class NavigatingPerson {
                 };
             } else {
                 plan.count++;
-                // if (plan.count >= 100) this.plan = { type: 'none' };
             }
         } else {
             const done = !plan.steps.length;
@@ -113,7 +117,10 @@ class NavigatingPerson {
         }
     }
 
-    // goalPosition: { x: number; y: number }
+    /**
+     * @param {{ x: number, y: number }} goalPosition 
+     * @param {number} iterationAttempts - the number of iterations before yielding
+     */
     *constructPlan(goalPosition, iterationAttempts = 100) {
         const goalPos = new LV2(goalPosition.x, goalPosition.y);
         const start = {
