@@ -33,15 +33,49 @@ function getRandomPersonLocationOnMap(map, staticObjects, maxIterations = 100) {
     }
     return undefined;
 }
-/*
-    type PlanDetail = {
-        moveToX: number;
-        moveToY: number;
-        facingAngle: number;
-        animateWalk: boolean;
-        prevState: PlanDetail | undefined;
-    };
-*/
+
+/**
+ * @typedef {Object} PlanDetail
+ * @property {number} moveToX
+ * @property {number} moveToY
+ * @property {number} facingAngle
+ * @property {boolean} animateWalk
+ * @property {PlanDetail|null} prevState 
+ */
+
+/**
+ * @desc gets a list of positions surrounding a point
+ * @param {number} x 
+ * @param {number} y 
+ * @param {number} stepSize 
+ */
+function getSurroundingPositions(x, y, stepSize) {
+    return [
+        { x: x + stepSize, y, angle: 0 },
+        { x: x + stepSize, y: y + stepSize, angle: 45 },
+        { x, y: y + stepSize, angle: 90 },
+        { x: x - stepSize, y: y + stepSize, angle: 135 },
+        { x: x - stepSize, y, angle: 180 },
+        { x: x - stepSize, y: y - stepSize, angle: 225 },
+        { x, y: y - stepSize, angle: 270 },
+        { x: x + stepSize, y: y - stepSize, angle: 315 },
+    ];
+}
+
+class Plan {
+    /**
+     * @constructor
+     * @param {'partial' | 'following'} type 
+     * @param {iterator} gen - an iterator which upon finishing, resolves with
+     * a path for an agent to follow
+     * @param {Array<PlanDetail>} steps 
+     */
+    constructor(type, gen, steps = []) {
+        this.type = type;
+        this.gen = gen;
+        this.steps = steps;
+    }
+}
 
 class NavigatingPerson {
     /**
@@ -54,49 +88,35 @@ class NavigatingPerson {
         this.person = person;
         this.map = map;
         this.objList = objList;
-        this.plan = { type: 'none' };
+        this.plan = undefined;
         this._t = 0;
     }
 
-    getSurroundingPositions(x, y, stepSize) {
-        return [
-            { x: x + stepSize, y, angle: 0 },
-            { x: x + stepSize, y: y + stepSize, angle: 45 },
-            { x, y: y + stepSize, angle: 90 },
-            { x: x - stepSize, y: y + stepSize, angle: 135 },
-            { x: x - stepSize, y, angle: 180 },
-            { x: x - stepSize, y: y - stepSize, angle: 225 },
-            { x, y: y - stepSize, angle: 270 },
-            { x: x + stepSize, y: y - stepSize, angle: 315 },
-        ];
-    }
-
     startPlanTo(goal) {
-        this.plan = {
-            type: 'partial',
-            gen: this.constructPlan(goal, 400),
-            count: 0,
-        };
+        this.plan = new Plan(
+            'partial',
+            this.constructPlan(goal, 400),
+        );
     }
 
-    step(dt) {
+    step() {
         const plan = this.plan;
-        if (plan.type === 'none') {
+        if (!plan) {
             const goal = getRandomPersonLocationOnMap(this.map.getBoundingBox(), this.objList, 500);
             if (!goal) return;
-            this.plan = {
-                type: 'partial',
-                gen: this.constructPlan(goal, 400),
-                count: 0,
-            };
+            this.plan = new Plan(
+                'partial',
+                this.constructPlan(goal, 400),
+            );
         } else if (plan.type === 'partial') {
             const rv = plan.gen.next();
             if (rv.done) {
                 if (!rv.value) return this.plan = { type: 'none' };
-                this.plan = {
-                    type: 'following',
-                    steps: rv.value,
-                };
+                this.plan = new Plan(
+                    'following',
+                    undefined,
+                    rv.value,
+                );
             } else {
                 plan.count++;
             }
@@ -112,7 +132,7 @@ class NavigatingPerson {
                 });
                 this._t += 0.1;
             } else {
-                this.plan = { type: 'none' };
+                this.plan = undefined;
             }
         }
     }
@@ -131,22 +151,14 @@ class NavigatingPerson {
         start.dist = goalPos.dist(start);
         const stack = [start];
         const visited = new Map([[`${start.x},${start.y}`, true]]);
-        function recordState(state) {
-            const key = `${state.x},${state.y}`;
-            state.key = key;
-            visited.set(key, true);
-        }
         let tries = 0;
         while(stack.length) {
             for(let i = 0; i < iterationAttempts && stack.length; i++) {
                 const stepSize = 2;
                 // get nextState from stack
                 const current = stack.shift();
-                // recordState(current);
                 if (!current) continue;
                 const dist = goalPos.dist(current);
-                // console.log(dist);
-                // console.log('D', dist);
                 // while not reached goal
                 const goalReached = dist < stepSize * 2;
                 // if this is goal, return formulated plan
@@ -163,11 +175,10 @@ class NavigatingPerson {
                         list.unshift(detail);
                         ptr = ptr.prev;
                     }
-                    // console.log(list);
                     return list;
                 }
                 // else compute next states which have not been visited
-                const otherPositions = this.getSurroundingPositions(current.x, current.y, stepSize)
+                const otherPositions = getSurroundingPositions(current.x, current.y, stepSize)
                     .filter(state => {
                         const key = `${state.x},${state.y}`;
                         state.key = key;
