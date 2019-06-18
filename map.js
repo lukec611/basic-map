@@ -67,6 +67,14 @@ class LMap {
     }
 
     /**
+     * @param {number} zoom
+     */
+    setZoom(zoom) {
+        this.zoom = zoom;
+        this.mapContainer.style.transform = LMap.computeCssMatrix3d(this.view, this.zoom);
+    }
+
+    /**
      * @desc computes a css matrix for the map
      * @param {'2d' | '3d'} type 
      * @param {number} zoom - how "zoomed-in" the map is 

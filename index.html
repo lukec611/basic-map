@@ -44,14 +44,20 @@
                 const index = options.indexOf(map.zoom);
                 const nextIndex = (index + 1) % options.length;
                 const nextOption = options[nextIndex];
-                map.zoom = nextOption;
                 event.target.innerHTML = `${map.zoom}x`;
-                map.toggleView();
-                map.toggleView();
+                map.setZoom(nextOption);
             }
 
             const objList = [];
 
+            function createName(letter, postFix = '', prefix = '', letterDuplications = 4) {
+                const text = [prefix, letter.repeat(letterDuplications), postFix].join('');
+                return `
+                    <div style="font-size:10px;padding:2px;box-sizing:border-box">
+                        ${text}
+                    </div>
+                `;
+            }
             const cubes = [];
             Office.forEach(item => {
                 const xAxisScaling = 60;
@@ -60,7 +66,7 @@
                     const desk = new Desk(
                         (item.x + 1) * xAxisScaling,
                         (item.y + 1) * yAxisScaling,
-                        item.letter,
+                        createName(item.letter, "'s desk"),
                         item.horiz,
                     );
                     desk.addToMap(map);
@@ -73,7 +79,7 @@
                         colors: '#00000000,#00000000,#00000000'.split(','),
                         text: [
                             `   <div style="width:100%;height:100%;box-sizing: border-box;border:2px solid black;background-color:white;">
-                                    ${item.letter}
+                                    ${createName(item.letter, ' room', 'the ')}
                                 </div>`,
                             `<div style="border: 4px solid black;width:100%;height:100%;box-sizing: border-box; background-color:white;"></div>`,
                             `<div style="border: 4px solid black;width:100%;height:100%;box-sizing: border-box; background-color:white;"></div>`,
