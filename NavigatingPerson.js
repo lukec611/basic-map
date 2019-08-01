@@ -98,13 +98,6 @@ class NavigatingPerson {
         this._t = 0;
     }
 
-    startPlanTo(goal) {
-        this.plan = new Plan(
-            'partial',
-            this.constructPlan(goal, 400),
-        );
-    }
-
     step() {
         const plan = this.plan;
         if (!plan) {
@@ -112,7 +105,7 @@ class NavigatingPerson {
             if (!goal) return;
             this.plan = new Plan(
                 'partial',
-                this.constructPlan(goal, 400),
+                constructPlan(goal, this.person, this.objList, this.map.getBoundingBox(), 400),
             );
         } else if (plan.type === 'partial') {
             const rv = plan.gen.next();
@@ -142,73 +135,75 @@ class NavigatingPerson {
             }
         }
     }
+}
 
-    /**
-     * @param {{ x: number, y: number }} goalPosition 
-     * @param {number} iterationAttempts - the number of iterations before yielding
-     */
-    *constructPlan(goalPosition, iterationAttempts = 100) {
-        const goalPos = new LV2(goalPosition.x, goalPosition.y);
-        const start = {
-            x: this.person.x,
-            y: this.person.y,
-            prev: null,
-        };
-        start.dist = goalPos.dist(start);
-        const stack = [start];
-        const visited = new Map([[`${start.x},${start.y}`, true]]);
-        let tries = 0;
-        while(stack.length) {
-            for(let i = 0; i < iterationAttempts && stack.length; i++) {
-                const stepSize = 2;
-                // get nextState from stack
-                const current = stack.shift();
-                if (!current) continue;
-                const dist = goalPos.dist(current);
-                // while not reached goal
-                const goalReached = dist < stepSize * 2;
-                // if this is goal, return formulated plan
-                if (goalReached) {
-                    let ptr = current;
-                    const list = [];
-                    while(ptr) {
-                        const detail = {
-                            moveToX: ptr.x,
-                            moveToY: ptr.y,
-                            facingAngle: ptr.angle || 0,
-                            animateWalk: true,
-                        };
-                        list.unshift(detail);
-                        ptr = ptr.prev;
-                    }
-                    return list;
+/**
+ * @param {{ x: number, y: number }} goalPosition 
+ * @param {{ x: number, y: number }} currentPosition 
+ * @param {Array<{ getBoundingBox(): Bbox }>} staticObjects 
+ * @param {Bbox} mapBoundingBox
+ * @param {number} iterationAttempts - the number of iterations before yielding
+ */
+function *constructPlan(goalPosition, currentPosition, staticObjects, mapBoundingBox, iterationAttempts = 100) {
+    const goalPos = new LV2(goalPosition.x, goalPosition.y);
+    const start = {
+        x: currentPosition.x,
+        y: currentPosition.y,
+        prev: null,
+    };
+    start.dist = goalPos.dist(start);
+    const stack = [start];
+    const visited = new Map([[`${start.x},${start.y}`, true]]);
+    let tries = 0;
+    while(stack.length) {
+        for(let i = 0; i < iterationAttempts && stack.length; i++) {
+            const stepSize = 2;
+            // get nextState from stack
+            const current = stack.shift();
+            if (!current) continue;
+            const dist = goalPos.dist(current);
+            // while not reached goal
+            const goalReached = dist < stepSize * 2;
+            // if this is goal, return formulated plan
+            if (goalReached) {
+                let ptr = current;
+                const list = [];
+                while(ptr) {
+                    const detail = {
+                        moveToX: ptr.x,
+                        moveToY: ptr.y,
+                        facingAngle: ptr.angle || 0,
+                        animateWalk: true,
+                    };
+                    list.unshift(detail);
+                    ptr = ptr.prev;
                 }
-                // else compute next states which have not been visited
-                const otherPositions = getSurroundingPositions(current.x, current.y, stepSize)
-                    .filter(state => {
-                        const key = `${state.x},${state.y}`;
-                        state.key = key;
-                        if (visited.has(key)) return false;
-                        state.dist = goalPos.dist(state);
-                        const bbox = Person.createBoundingBox(state.x, state.y);
-                        if (!bbox.within(this.map.getBoundingBox())) return false;
-                        return !bbox.intersectsWithAnyObject(this.objList);
-                    })
-                    .map(state => {
-                        state.prev = current;
-                        visited.set(state.key, true);
-                        return state;
-                    });
-
-                // add them to the stack
-                stack.push(...otherPositions);
-                stack.sort((a, b) => {
-                    return a.dist - b.dist;
-                });
+                return list;
             }
-            yield tries++;
-        }
-        return null;
-    }
+            // else compute next states which have not been visited
+            const otherPositions = getSurroundingPositions(current.x, current.y, stepSize)
+                .filter(state => {
+                    const key = `${state.x},${state.y}`;
+                    state.key = key;
+                    if (visited.has(key)) return false;
+                    state.dist = goalPos.dist(state);
+                    const bbox = Person.createBoundingBox(state.x, state.y);
+                    if (!bbox.within(mapBoundingBox)) return false;
+                    return !bbox.intersectsWithAnyObject(staticObjects);
+                })
+                .map(state => {
+                    state.prev = current;
+                    visited.set(state.key, true);
+                    return state;
+                });
 
+            // add them to the stack
+            stack.push(...otherPositions);
+            stack.sort((a, b) => {
+                return a.dist - b.dist;
+            });
+        }
+        yield tries++;
+    }
+    return null;
 }
