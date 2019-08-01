@@ -12,6 +12,11 @@ class RandomUtility {
     }
 }
 
+let NAV_PERSON_ID_COUNT = 0;
+function createNewId() {
+    return `id-${NAV_PERSON_ID_COUNT++}`;
+}
+
 /**
  * @desc returns a random position on the map
  * @param {Bbox} map 
@@ -85,6 +90,7 @@ class NavigatingPerson {
      * @param {Array<{ getBoudningBox(): Bbox }>} objList 
      */
     constructor(person, map, objList) {
+        this.id = createNewId();
         this.person = person;
         this.map = map;
         this.objList = objList;
