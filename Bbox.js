@@ -74,4 +74,24 @@ class Bbox {
         const maxy = Math.max(b1.y + b1.h, b2.y + b2.h);
         return new Bbox(minx, miny, maxx - minx, maxy - miny);
     }
+
+    /**
+     * @returns {{ x: number, y: number, w: number, h: number }} - a basic JSON object
+     */
+    serialize() {
+        return {
+            x: this.x,
+            y: this.y,
+            w: this.w,
+            h: this.h,
+        };
+    }
+
+    /**
+     * @param {{ x: number, y: number, w: number, h: number }} ob
+     * @returns {Bbox} 
+     */
+    static deserialize(ob) {
+        return new Bbox(ob.x, ob.y, ob.w, ob.h);
+    }
 }
