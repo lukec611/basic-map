@@ -96,17 +96,40 @@
             cubes.forEach(cube => map.addItem(cube.createElement()));
 
 
-            // create fake web worker
-            
-            const workerInterface = new WorkerInterface(map, objList, postToWorkProcessor);
-            const workProcessor = new WorkProcessor(workerInterface.getInitJson(), postToWorkerInterface);
+            const allowWebWorker = true;
+            let workerInterface = null;
+            let workProcessor = null;
+            if (allowWebWorker) {
+                console.log('using real web worker');
+                const worker = new Worker('./worker.js');
+                workerInterface = new WorkerInterface(map, objList, data => {
+                    worker.postMessage({
+                        type: 'job',
+                        data,
+                    });
+                });
+                worker.postMessage({
+                    type: 'init',
+                    initJson: workerInterface.getInitJson(),
+                });
 
-            function postToWorkProcessor(job) {
-                workProcessor.beginJob(job);
-            }
+                worker.onmessage = function(ev) {
+                    const { data: completedJob } = ev;
+                    workerInterface.receiveCompletedJobDetails(completedJob);
+                }
 
-            function postToWorkerInterface(completedJob) {
-                workerInterface.receiveCompletedJobDetails(completedJob);
+            } else {
+                // create fake web worker
+                workerInterface = new WorkerInterface(map, objList, postToWorkProcessor);
+                workProcessor = new WorkProcessor(workerInterface.getInitJson(), postToWorkerInterface);
+    
+                function postToWorkProcessor(job) {
+                    workProcessor.beginJob(job);
+                }
+    
+                function postToWorkerInterface(completedJob) {
+                    workerInterface.receiveCompletedJobDetails(completedJob);
+                }
             }
 
 
@@ -121,7 +144,7 @@
             const navigatingPeople = Array.from({ length: 20 }, () => createAnimatedPerson());
             setInterval(() => {
                 navigatingPeople.forEach(person => person.step(1));
-                workProcessor.step();
+                if (workProcessor) workProcessor.step();
             }, 20);
         </script>
     </body>
