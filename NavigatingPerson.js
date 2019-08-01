@@ -71,13 +71,10 @@ class Plan {
     /**
      * @constructor
      * @param {'partial' | 'following'} type 
-     * @param {iterator} gen - an iterator which upon finishing, resolves with
-     * a path for an agent to follow
      * @param {Array<PlanDetail>} steps 
      */
-    constructor(type, gen, steps = []) {
+    constructor(type, steps = []) {
         this.type = type;
-        this.gen = gen;
         this.steps = steps;
     }
 }
@@ -87,15 +84,17 @@ class NavigatingPerson {
      * @constructor
      * @param {Person} person 
      * @param {LMap} map 
-     * @param {Array<{ getBoudningBox(): Bbox }>} objList 
+     * @param {Array<{ getBoudningBox(): Bbox }>} objList
+     * @param {WorkerInterface} workerInterface
      */
-    constructor(person, map, objList) {
+    constructor(person, map, objList, workerInterface) {
         this.id = createNewId();
         this.person = person;
         this.map = map;
         this.objList = objList;
         this.plan = undefined;
         this._t = 0;
+        this.workerInterface = workerInterface;
     }
 
     step() {
@@ -105,16 +104,22 @@ class NavigatingPerson {
             if (!goal) return;
             this.plan = new Plan(
                 'partial',
-                constructPlan(goal, this.person, this.objList, this.map.getBoundingBox(), 400),
             );
+            this.workerInterface.addJob({
+                id: this.id,
+                currentPosition: {
+                    x: this.person.x,
+                    y: this.person.y,
+                },
+                goalPosition: goal,
+            });
         } else if (plan.type === 'partial') {
-            const rv = plan.gen.next();
-            if (rv.done) {
-                if (!rv.value) return this.plan = { type: 'none' };
+            if (this.workerInterface.jobComplete(this.id)) {
+                const details = this.workerInterface.popCompletedJob(this.id);
+                if (!details) return this.plan = { type: 'none' };
                 this.plan = new Plan(
                     'following',
-                    undefined,
-                    rv.value,
+                    details,
                 );
             } else {
                 plan.count++;

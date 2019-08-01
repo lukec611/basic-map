@@ -21,6 +21,7 @@
             <div id="map-container">
             </div>
         </div>
+        <script src="worker_interface.js"></script>
         <script src="LLA.js"></script>
         <script src="Bbox.js"></script>
         <script src="cube.js"></script>
@@ -93,17 +94,34 @@
                 }
             });
             cubes.forEach(cube => map.addItem(cube.createElement()));
+
+
+            // create fake web worker
+            
+            const workerInterface = new WorkerInterface(map, objList, postToWorkProcessor);
+            const workProcessor = new WorkProcessor(workerInterface.getInitJson(), postToWorkerInterface);
+
+            function postToWorkProcessor(job) {
+                workProcessor.beginJob(job);
+            }
+
+            function postToWorkerInterface(completedJob) {
+                workerInterface.receiveCompletedJobDetails(completedJob);
+            }
+
+
             function createAnimatedPerson() {
                 const start = getRandomPersonLocationOnMap(map.getBoundingBox(), objList);
                 const person = new Person(0, 0);
                 person.setRenderConfiguration({ x: start.x, y: start.y });
                 person.addToMap(map);
-                const navP = new NavigatingPerson(person, map, objList);
+                const navP = new NavigatingPerson(person, map, objList, workerInterface);
                 return navP;
             }
             const navigatingPeople = Array.from({ length: 20 }, () => createAnimatedPerson());
             setInterval(() => {
                 navigatingPeople.forEach(person => person.step(1));
+                workProcessor.step();
             }, 20);
         </script>
     </body>
