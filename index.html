@@ -106,8 +106,8 @@
             const allowWebWorker = true;
             let workerInterface = null;
             let workProcessor = null;
-            if (allowWebWorker) {
-                console.log('using real web worker');
+
+            function movePathFindingAlgorithmToWebWorker() {
                 const worker = new Worker('./worker.js');
                 workerInterface = new WorkerInterface(map, objList, data => {
                     worker.postMessage({
@@ -124,8 +124,9 @@
                     const { data: completedJob } = ev;
                     workerInterface.receiveCompletedJobDetails(completedJob);
                 }
-
-            } else {
+                console.log('using web worker for path finding');
+            }
+            function keepPathFindingAlgorithmInMainThread() {
                 // create fake web worker
                 workerInterface = new WorkerInterface(map, objList, postToWorkProcessor);
                 workProcessor = new WorkProcessor(workerInterface.getInitJson(), postToWorkerInterface);
@@ -137,6 +138,14 @@
                 function postToWorkerInterface(completedJob) {
                     workerInterface.receiveCompletedJobDetails(completedJob);
                 }
+                console.log('using main thread for path finding');
+            }
+            
+            try {
+                if (!allowWebWorker) throw 'use main thread :D';
+                movePathFindingAlgorithmToWebWorker();
+            } catch (e) {
+                keepPathFindingAlgorithmInMainThread();
             }
 
 
