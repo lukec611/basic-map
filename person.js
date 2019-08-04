@@ -38,7 +38,7 @@ class Person {
             halfBodyWidth,
         };
 
-        const colors = ['#000000', '#333333', '#555555', '#666666'];
+        const colors = ['var(--pplDark)', 'var(--pplMed)', 'var(--pplLight)', 'var(--pplLighter)', 'var(--pplDark)', 'var(--pplDark)'];
         const text = [];
 
         this.cubes.head = new Cube({

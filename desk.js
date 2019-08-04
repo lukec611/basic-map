@@ -28,9 +28,9 @@ class Desk {
         }
         const woodDepth = 4;
         const colors = [
-            '#000000',
-            '#000000',
-            '#000000',
+            'var(--deskLegColor0)',
+            'var(--deskLegColor1)',
+            'var(--deskLegColor2)',
         ];
         const topColors = [
             '#FFFFFF',
@@ -83,7 +83,7 @@ class Desk {
                 x: this.x,
                 y: this.y,
                 colors: topColors,
-                text: [`<div style="border:1px solid black;width:100%;height:100%">${this.owner}</div>`, '', ''],
+                text: [`<div style="border:1px solid var(--deskOutline);width:100%;height:100%;color:var(--deskFontColor);background-color:var(--deskTopColor);">${this.owner}</div>`, '', ''],
                 width,
                 height: woodDepth,
                 depth: length,

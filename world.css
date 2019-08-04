@@ -1,0 +1,20 @@
+:root {
+    /* desk colors */
+    --deskOutline: black;
+    --deskLegColor0: #000000;
+    --deskLegColor1: #323232;
+    --deskLegColor2: #8a8888;
+    --deskFontColor: black;
+    --deskTopColor: white;
+
+    /* people colors */
+    --pplDark: #000000;
+    --pplMed: #333333;
+    --pplLight: #555555;
+    --pplLighter: #666666;
+
+    --buildingColor1: white;
+    --buildingColor2: white;
+    --buildingColor3: white;
+    --buildingFG: black;
+}

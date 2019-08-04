@@ -1,12 +1,20 @@
 
+:root {
+    /* the foreground color to use */
+    --fg: rgb(255, 140, 0);
+    /* the background color to use */
+    --bg: white;
+}
+
 body {
     padding: 0;
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
+    background-color: var(--bg);
 }
 
 #map-wrapper {
-    background-color: white;
+    background-color: var(--bg);
     position: absolute;
     top: 40px;
     left: 40px;
@@ -28,8 +36,8 @@ body {
 .tile {
     width: 40px;
     height: 40px;
-    border-top: 2px dashed lightseagreen;
-    border-left: 2px dashed lightseagreen;
+    border-top: 2px dashed var(--fg);
+    border-left: 2px dashed var(--fg);
     font-size: 10px;
 }
 #vertical-tool-border {
@@ -38,7 +46,7 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    border-right: 4px dashed lightseagreen;
+    border-right: 4px dashed var(--fg);
 }
 #horizontal-tool-border {
     width: 100vw;
@@ -46,18 +54,19 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    border-bottom: 4px dashed lightseagreen;
+    border-bottom: 4px dashed var(--fg);
 }
-#tool, #tool-2, #tool-3 {
+#tool, #tool-2, #tool-3, #tool-4 {
     position: fixed;
     top: 10px;
     left: 10px;
     width: 60px;
     height: 60px;
-    background-color: white;
-    border: 4px dashed lightseagreen;
+    background-color: var(--bg);
+    border: 4px dashed var(--fg);
+    color: var(--fg);
     border-radius: 60px;
-    color: lightseagreen;
+    color: var(--fg);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -70,4 +79,8 @@ body {
 
 #tool-3 {
     top: 170px;
+}
+
+#tool-4 {
+    top: 250px;
 }

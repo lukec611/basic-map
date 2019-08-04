@@ -38,7 +38,7 @@ class LMap {
                 tile.className = 'tile';
                 this.mapContainer.appendChild(tile);
                 tile.onclick = async () => {
-                    tile.style.backgroundColor = 'lightseagreen';
+                    tile.style.backgroundColor = 'var(--fg)';
                     tile.innerHTML = `(${x}, ${y})`;
                     await new Promise(r => setTimeout(r, 2500));
                     tile.innerHTML = '';

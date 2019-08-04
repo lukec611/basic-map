@@ -5,6 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="index.css" rel="stylesheet" type="text/css" >
+        <link href="world.css" rel="stylesheet" type="text/css" >
     </head>
     <body>
         <div id="vertical-tool-border"></div>
@@ -18,6 +19,10 @@
 
         <div id="tool-3" onclick="togglePause()">
             >
+        </div>
+
+        <div id="tool-4" onclick="toggleDarkMode()">
+            D
         </div>
 
 
@@ -68,6 +73,59 @@
                 map.setZoom(nextOption);
             }
 
+            let darkMode = false;
+            function toggleDarkMode() {
+                darkMode = !darkMode;
+                document.getElementById('tool-4').innerHTML = darkMode ? 'L' : 'D';
+                const lightModeScheme = {
+                    fg: 'rgb(255, 140, 0)',
+                    bg: 'white',
+
+                    pplDark: '#000000',
+                    pplMed: '#333333',
+                    pplLight: '#555555',
+                    pplLighter: '#666666',
+
+                    buildingColor1: 'white',
+                    buildingColor2: 'white',
+                    buildingColor3: 'white',
+                    buildingFG: 'black',
+
+                    deskOutline: 'black',
+                    deskLegColor0: '#000000',
+                    deskLegColor1: '#323232',
+                    deskLegColor2: '#8a8888',
+                    deskFontColor: 'black',
+                    deskTopColor: 'white',
+                };
+                const darkModeScheme = {
+                    fg: 'orange',
+                    bg: 'black',
+
+                    pplDark: '#FFFFFF',
+                    pplMed: '#CCCCCC',
+                    pplLight: '#AAAAAA',
+                    pplLighter: '#999999',
+
+                    buildingColor1: 'black',
+                    buildingColor2: 'black',
+                    buildingColor3: 'black',
+                    buildingFG: 'white',
+
+                    deskOutline: 'white',
+                    deskLegColor0: 'white',
+                    deskLegColor1: '#CDCDCD',
+                    deskLegColor2: '#757777',
+                    deskFontColor: 'white',
+                    deskTopColor: 'black',
+                };
+                const colorScheme = darkMode ? darkModeScheme : lightModeScheme;
+
+                Object.keys(colorScheme).forEach(k => {
+                    document.documentElement.style.setProperty(`--${k}`, colorScheme[k]);
+                });
+            }
+
             const objList = [];
 
             function createName(letter, postFix = '', prefix = '', letterDuplications = 4) {
@@ -96,13 +154,13 @@
                     const cube = new Cube({
                         x: (item.x + 1) * xAxisScaling,
                         y: (item.y + 1) * yAxisScaling,
-                        colors: '#00000000,#00000000,#00000000'.split(','),
+                        colors: 'var(--buildingColor1),var(--buildingColor2),var(--buildingColor3)'.split(','),
                         text: [
-                            `   <div style="width:100%;height:100%;box-sizing: border-box;border:2px solid black;background-color:white;">
+                            `   <div style="width:100%;height:100%;box-sizing: border-box;border:2px solid var(--buildingFG);color:var(--buildingFG);">
                                     ${createName(item.letter, ' room', 'the ')}
                                 </div>`,
-                            `<div style="border: 4px solid black;width:100%;height:100%;box-sizing: border-box; background-color:white;"></div>`,
-                            `<div style="border: 4px solid black;width:100%;height:100%;box-sizing: border-box; background-color:white;"></div>`,
+                            `<div style="border: 4px solid var(--buildingFG);width:100%;height:100%;box-sizing: border-box;"></div>`,
+                            `<div style="border: 4px solid var(--buildingFG);width:100%;height:100%;box-sizing: border-box;"></div>`,
                         ],
                         width: item.width * xAxisScaling,
                         depth: item.height * yAxisScaling,
