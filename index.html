@@ -37,6 +37,8 @@
                 const params = new URLSearchParams(window.location.search);
                 settings.numPeople = Number(params.get('numPeople') || 20);
             })();
+
+            console.log('settings', settings);
             
             const map = new LMap({
                 rootSelector: '#map-wrapper',
@@ -157,7 +159,7 @@
                 const navP = new NavigatingPerson(person, map, objList, workerInterface);
                 return navP;
             }
-            const navigatingPeople = Array.from({ length: 20 }, () => createAnimatedPerson());
+            const navigatingPeople = Array.from({ length: settings.numPeople }, () => createAnimatedPerson());
             setInterval(() => {
                 navigatingPeople.forEach(person => person.step(1));
                 if (workProcessor) workProcessor.step();
