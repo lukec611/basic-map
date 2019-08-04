@@ -74,53 +74,36 @@
             }
 
             let darkMode = false;
+            const darkModeScheme = {
+                fg: 'orange',
+                bg: 'black',
+
+                pplDark: '#FFFFFF',
+                pplMed: '#CCCCCC',
+                pplLight: '#AAAAAA',
+                pplLighter: '#999999',
+
+                buildingColor1: 'black',
+                buildingColor2: 'black',
+                buildingColor3: 'black',
+                buildingFG: 'white',
+
+                deskOutline: 'white',
+                deskLegColor0: 'white',
+                deskLegColor1: '#CDCDCD',
+                deskLegColor2: '#757777',
+                deskFontColor: 'white',
+                deskTopColor: 'black',
+            };
+            
+            const computedStyles = getComputedStyle(document.documentElement);
+            const lightModeScheme = Object.keys(darkModeScheme).reduce((p, k) => Object.assign(p, {
+                [k]: computedStyles.getPropertyValue(`--${k}`),
+            }));
             function toggleDarkMode() {
                 darkMode = !darkMode;
                 document.getElementById('tool-4').innerHTML = darkMode ? 'L' : 'D';
-                const lightModeScheme = {
-                    fg: 'rgb(255, 140, 0)',
-                    bg: 'white',
-
-                    pplDark: '#000000',
-                    pplMed: '#333333',
-                    pplLight: '#555555',
-                    pplLighter: '#666666',
-
-                    buildingColor1: 'white',
-                    buildingColor2: 'white',
-                    buildingColor3: 'white',
-                    buildingFG: 'black',
-
-                    deskOutline: 'black',
-                    deskLegColor0: '#000000',
-                    deskLegColor1: '#323232',
-                    deskLegColor2: '#8a8888',
-                    deskFontColor: 'black',
-                    deskTopColor: 'white',
-                };
-                const darkModeScheme = {
-                    fg: 'orange',
-                    bg: 'black',
-
-                    pplDark: '#FFFFFF',
-                    pplMed: '#CCCCCC',
-                    pplLight: '#AAAAAA',
-                    pplLighter: '#999999',
-
-                    buildingColor1: 'black',
-                    buildingColor2: 'black',
-                    buildingColor3: 'black',
-                    buildingFG: 'white',
-
-                    deskOutline: 'white',
-                    deskLegColor0: 'white',
-                    deskLegColor1: '#CDCDCD',
-                    deskLegColor2: '#757777',
-                    deskFontColor: 'white',
-                    deskTopColor: 'black',
-                };
                 const colorScheme = darkMode ? darkModeScheme : lightModeScheme;
-
                 Object.keys(colorScheme).forEach(k => {
                     document.documentElement.style.setProperty(`--${k}`, colorScheme[k]);
                 });
