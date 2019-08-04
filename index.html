@@ -36,6 +36,7 @@
             (function () {
                 const params = new URLSearchParams(window.location.search);
                 settings.numPeople = Number(params.get('numPeople') || 20);
+                settings.useWebWorker = !params.has('useWebWorker') || params.get('useWebWorker') === 'true';
             })();
 
             console.log('settings', settings);
@@ -105,7 +106,6 @@
             cubes.forEach(cube => map.addItem(cube.createElement()));
 
 
-            const allowWebWorker = true;
             let workerInterface = null;
             let workProcessor = null;
 
@@ -132,7 +132,7 @@
                 // create fake web worker
                 workerInterface = new WorkerInterface(map, objList, postToWorkProcessor);
                 workProcessor = new WorkProcessor(workerInterface.getInitJson(), postToWorkerInterface);
-    
+
                 function postToWorkProcessor(job) {
                     workProcessor.beginJob(job);
                 }
@@ -144,7 +144,7 @@
             }
             
             try {
-                if (!allowWebWorker) throw 'use main thread :D';
+                if (!settings.useWebWorker) throw 'use main thread :D';
                 movePathFindingAlgorithmToWebWorker();
             } catch (e) {
                 keepPathFindingAlgorithmInMainThread();
