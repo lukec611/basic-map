@@ -48,7 +48,7 @@ body {
     left: 0;
     border-bottom: 4px dashed lightseagreen;
 }
-#tool, #tool-2 {
+#tool, #tool-2, #tool-3 {
     position: fixed;
     top: 10px;
     left: 10px;
@@ -66,4 +66,8 @@ body {
 
 #tool-2 {
     top: 90px;
+}
+
+#tool-3 {
+    top: 170px;
 }

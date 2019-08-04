@@ -16,6 +16,10 @@
             1x
         </div>
 
+        <div id="tool-3" onclick="togglePause()">
+            >
+        </div>
+
 
         <div id="map-wrapper">
             <div id="map-container">
@@ -40,6 +44,11 @@
             })();
 
             console.log('settings', settings);
+            let paused = false;
+            function togglePause() {
+                paused = !paused;
+                document.getElementById('tool-3').innerHTML = paused ? '||' : '>';
+            }
             
             const map = new LMap({
                 rootSelector: '#map-wrapper',
@@ -161,6 +170,7 @@
             }
             const navigatingPeople = Array.from({ length: settings.numPeople }, () => createAnimatedPerson());
             setInterval(() => {
+                if (paused) return;
                 navigatingPeople.forEach(person => person.step(1));
                 if (workProcessor) workProcessor.step();
             }, 20);
