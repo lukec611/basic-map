@@ -25,6 +25,10 @@
             D
         </div>
 
+        <div id="tool-5" onclick="setPerspectiveView()">
+            &lt;
+        </div>
+
 
         <div id="map-wrapper">
             <div id="map-container">
@@ -71,6 +75,9 @@
                 const nextOption = options[nextIndex];
                 event.target.innerHTML = `${map.zoom}x`;
                 map.setZoom(nextOption);
+            }
+            function setPerspectiveView() {
+                map.setView('perspective');
             }
 
             let darkMode = false;

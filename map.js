@@ -54,7 +54,7 @@ class LMap {
 
     /**
      * sets the view style
-     * @param {'2d' | '3d'} newView 
+     * @param {'2d' | '3d' | 'perspective'} newView 
      */
     setView(newView = '3d') {
         this.view = newView;
@@ -71,15 +71,19 @@ class LMap {
      */
     setZoom(zoom) {
         this.zoom = zoom;
+        this.view = this.view === '2d' ? '2d' : '3d';
         this.mapContainer.style.transform = LMap.computeCssMatrix3d(this.view, this.zoom);
     }
 
     /**
      * @desc computes a css matrix for the map
-     * @param {'2d' | '3d'} type 
+     * @param {'2d' | '3d' | 'perspective'} type 
      * @param {number} zoom - how "zoomed-in" the map is 
      */
     static computeCssMatrix3d(type = '3d', zoom = 10) {
+        if (type === 'perspective') {
+            return LMap.computePerspective3dCssMatrix();
+        }
         if (type !== '3d') {
             return ` scale(${zoom / 10})`;
         }
@@ -106,5 +110,37 @@ class LMap {
             .transpose()
             .arr.join(', ');
         return `matrix3d(${matrixString})`;
+    }
+
+    /**
+     * @desc computes a 3d perspective css matrix
+     */
+    static computePerspective3dCssMatrix() {
+        const amZ = 2000;
+        const cameraPos = new LV3(0, 90, amZ);
+        const lookAt = new LV3(0, 0, amZ * 1.5);
+
+        const fakeUp = new LV3(0, 1, 0);
+        const vec = lookAt.sub(cameraPos).unit();
+        const right = fakeUp.cross(vec).unit();
+        const up = vec.cross(right).unit();
+        const lookAtMat = new LMat4([
+            right.x, up.x, vec.x, 0,
+            right.y, up.y, vec.y, 0,
+            right.z, up.z, vec.z, 0,
+            0, 0, 0, 1,
+        ]);
+        lookAtMat.itranspose();
+
+        const mainRote = LMat4.rotateX(90);
+        const mList = [
+            LMat4.trans(0, 1000, -70),
+            mainRote,
+        ];
+
+        const m = mList.reduceRight((p, c) => p.mult(c), LMat4.identity());
+
+        const matStr = m.transpose().arr.join(', ');
+        return `perspective(1000px) matrix3d(${matStr})`;
     }
 }

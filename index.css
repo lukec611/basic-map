@@ -56,7 +56,7 @@ body {
     left: 0;
     border-bottom: 4px dashed var(--fg);
 }
-#tool, #tool-2, #tool-3, #tool-4 {
+#tool, #tool-2, #tool-3, #tool-4, #tool-5 {
     position: fixed;
     top: 10px;
     left: 10px;
@@ -83,4 +83,8 @@ body {
 
 #tool-4 {
     top: 250px;
+}
+
+#tool-5 {
+    top: 330px;
 }
