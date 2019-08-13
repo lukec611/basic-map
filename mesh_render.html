@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mesh_Render</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            .mea {
+                background-color: turquoise;
+                width: 100px;
+                height: 30px;
+            }
+            .tri {
+                display: none;
+                width: 0px;
+                height: 0px;
+                border-left:    100px solid red;
+                border-right:   100px solid yellow;
+                border-bottom:  150px solid blue;
+            }    
+        </style>
+    </head>
+    <body>
+        <h1>Mesh Render</h1>
+        <div class="mea"></div>
+        <div class="tri"></div>
+
+        <script src="LLA.js"></script>
+        <script src="NavigatingPerson.js"></script>
+        <script>
+            function getRandomTriangle() {
+                const y = RandomUtility.randomIntBetween(300, 800);
+                const xOffset = 50;
+                const a = new LV2(xOffset, y);
+                const b = new LV2(
+                    RandomUtility.randomIntBetween(xOffset + a.x, xOffset + a.x + 200),
+                    y,
+                );
+
+                const c = new LV2(
+                    b.sub(a).x * Math.random() + a.x,
+                    y - RandomUtility.randomIntBetween(20, 300),
+                );
+
+
+                return [
+                    a,
+                    b,
+                    c,
+                ];
+            }
+            function drawTrianglePoints(tri) {
+                const size = 20;
+                function addPoint(p, col) {
+                    const e = document.createElement('div');
+                    e.style.position = 'absolute';
+                    e.style.width = `${size}px`;
+                    e.style.height = `${size}px`;
+                    e.style.top = `${p.y}px`;
+                    e.style.left = `${p.x}px`;
+                    e.style.backgroundColor = col;
+                    e.style.zIndex = '1000';
+                    document.body.appendChild(e);
+                }
+                addPoint(tri[0], 'pink');
+                addPoint(tri[1], 'yellow');
+                addPoint(tri[2], 'red');
+            }
+
+            function createTriangle(a, b, c) {
+                const ob = {
+                    leftMargin: c.x - a.x,
+                    bottomMargin: a.y - c.y,
+                    rightMargin: b.x - c.x,
+                    height: a.y - c.y,
+                };
+                return ob;
+            }
+
+            const triangle = getRandomTriangle();
+            console.log(triangle);
+            drawTrianglePoints(triangle);
+
+            const triDimensions = createTriangle(triangle[0], triangle[1], triangle[2]);
+
+            const elem = document.createElement('div');
+            elem.style.width = '0px';
+            elem.style.height = '0px';
+            console.log(triDimensions);
+            elem.style.borderLeft = `${triDimensions.leftMargin}px solid rgba(0,0,0,0)`;
+            elem.style.borderRight = `${triDimensions.rightMargin}px solid rgba(0,0,0,0)`;
+            elem.style.borderBottom = `${triDimensions.bottomMargin}px solid yellow`;
+            elem.style.borderTop = `${0}px solid rgba(0,0,0,0)`;
+            elem.style.position = 'absolute';
+            elem.style.top = `${triangle[0].y - triDimensions.height}px`;
+            elem.style.left = `50px`;
+
+            document.body.appendChild(elem);
+
+        </script>
+    </body>
+</html>
