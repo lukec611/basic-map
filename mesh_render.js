@@ -118,7 +118,7 @@ function lRenderTri(_t) {
     customScale.arr[5] *= -1;
 
     const matStack = [
-        LMat4.trans(200, 500, 0),
+        LMat4.trans(200, 300, 0),
         LMat4.rotateY(0),
         customScale,
         matFromOrigin,
