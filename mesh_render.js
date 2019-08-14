@@ -119,7 +119,7 @@ function lRenderTri(_t) {
 
     const matStack = [
         LMat4.trans(200, 500, 0),
-        LMat4.rotateY(-80),
+        LMat4.rotateY(0),
         customScale,
         matFromOrigin,
         rotateTo3D,
@@ -128,7 +128,7 @@ function lRenderTri(_t) {
 
     const m = matStack.reduce((p, c) => p.mult(c), LMat4.identity());
     m.itranspose();
-    const mString = `perspective(500px) matrix3d(${m.arr.join(',')})`;
+    const mString = `perspective(1000px) matrix3d(${m.arr.join(',')})`;
     
     ne.style.transform = mString;
     ne.style.transformOrigin = '0px 0px';
