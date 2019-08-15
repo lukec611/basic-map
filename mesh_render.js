@@ -52,7 +52,7 @@ function normalizeVector(v) {
     );
 }
 
-function lRenderTri(_t) {
+function lRenderTri(_t, parentDiv) {
     const t = orderTri(_t);
     // console.log(t);
     const pointA = t.a.copy();
@@ -102,7 +102,7 @@ function lRenderTri(_t) {
     brightness = brightness > 0 ? brightness * 255 : 0;
 
     const ne = document.createElement('div');
-    document.body.appendChild(ne);
+    parentDiv.appendChild(ne);
     ne.style.width = '0px';
     ne.style.height = '0px';
     ne.style.borderLeft = `${triangleCss.leftBorderWidth}px solid rgba(0,0,0,0)`;
@@ -112,14 +112,13 @@ function lRenderTri(_t) {
     ne.style.position = 'absolute';
     ne.style.top = `${0}px`;
     ne.style.left = '0px';
-    ne.style.backfaceVisibility = 'hidden';
 
-    const customScale = LMat4.scale(0.2);
+    const customScale = LMat4.scale(0.25);
     customScale.arr[5] *= -1;
 
     const matStack = [
-        LMat4.trans(200, 300, 0),
-        LMat4.rotateY(0),
+        // LMat4.trans(200, 300, 0),
+        LMat4.trans(0, 0, 0), // to center it
         customScale,
         matFromOrigin,
         rotateTo3D,
@@ -128,7 +127,7 @@ function lRenderTri(_t) {
 
     const m = matStack.reduce((p, c) => p.mult(c), LMat4.identity());
     m.itranspose();
-    const mString = `perspective(1000px) matrix3d(${m.arr.join(',')})`;
+    const mString = `matrix3d(${m.arr.join(',')})`;
     
     ne.style.transform = mString;
     ne.style.transformOrigin = '0px 0px';
@@ -141,6 +140,7 @@ function lRenderTri(_t) {
 }
 
 function start(deer) {
+    const parentDiv = document.createElement('div');
     // console.log(deer.verts.length, deer.triangles.length);
     deer.triangles.forEach(tri => {
         const a = new LV3(...deer.verts[tri[0]]);
@@ -150,8 +150,25 @@ function start(deer) {
             a,
             b,
             c,
-        });
+        }, parentDiv);
     });
+    document.body.appendChild(parentDiv);
+
+    parentDiv.style.transformStyle = 'preserve-3d';
+    parentDiv.style.transformOrigin = '0px 0px';
+    let angle = 0;
+
+    function rotate() {
+        const matrix = [
+            LMat4.trans(200, 300, 0),
+            LMat4.rotateY(angle),
+        ].reduce((p,c) => p.mult(c), LMat4.identity());
+        parentDiv.style.transform = `perspective(1000px) matrix3d(${matrix.transpose().arr.join(',')})`;
+        angle += 5;
+    }
+
+    setInterval(rotate, 100);
+
 }
 
 start(deer);
