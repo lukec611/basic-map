@@ -4,3 +4,7 @@
 <br/>
 <a href="https://lukec611.github.io/basic-map/?useWebWorker=false">path finding in main thread</a>
 <br/>
+<a href="https://lukec611.github.io/basic-map/triangle_render.html">random triangle renderer</a>
+<br/>
+<a href="https://lukec611.github.io/basic-map/mesh_render.html">mesh render</a>
+<br/>

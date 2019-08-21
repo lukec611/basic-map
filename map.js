@@ -14,7 +14,7 @@ class LMap {
         this.view = view;
         this.zoom = 10;
         this._initialiseMap();
-        this.toggleView();
+        this.setView(this.view);
     }
 
     /**

@@ -50,6 +50,7 @@
                 const params = new URLSearchParams(window.location.search);
                 settings.numPeople = Number(params.get('numPeople') || 20);
                 settings.useWebWorker = !params.has('useWebWorker') || params.get('useWebWorker') === 'true';
+                settings.initialView = params.get('view') || '3d';
             })();
 
             console.log('settings', settings);
@@ -63,6 +64,7 @@
                 rootSelector: '#map-wrapper',
                 width: 65,
                 height: 26,
+                view: settings.initialView,
             });
             function toggleDimentions() {
                 map.toggleView();
