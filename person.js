@@ -157,7 +157,7 @@ class Person {
         const neckHeight = this.dimensions.legHeight + this.dimensions.torsoHeight;
         // la.style.transformOrigin = `${this.dimensions.bodyThickness/2}px 0px ${neckHeight}px`;
         la.style.transformOrigin = `0 0 0`;
-        la.style.transform = `translate3d(${this.dimensions.armGap}px, ${-0.5}px, ${neckHeight+5}px) rotateY(${deg+180}deg) translate3d(${0}px, 0px, ${-this.dimensions.armHeight}px)`;
+        la.style.transform = `translate3d(${this.dimensions.armGap}px, ${0.5}px, ${neckHeight+5}px) rotateY(${deg+180}deg) translate3d(${0}px, 0px, ${-this.dimensions.armHeight}px)`;
         // ra.style.transformOrigin = `${this.dimensions.bodyThickness/2}px 0px ${neckHeight}px`;
         ra.style.transformOrigin = `0 0 0`;
         ra.style.transform = `translate3d(${this.dimensions.armGap}px, ${-0.5}px, ${neckHeight+5}px) rotateY(${-deg+180}deg)  translate3d(${0}px, 0px, ${-this.dimensions.armHeight}px)`;
