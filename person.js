@@ -154,15 +154,19 @@ class Person {
 
         var deg = Math.sin(walkingFrameDelta * 2 * Math.PI) * 8;
         var degL = Math.sin(walkingFrameDelta * 2 * Math.PI) * 10;
-        la.style.transform = `rotateY(${deg}deg)`;
         const neckHeight = this.dimensions.legHeight + this.dimensions.torsoHeight;
-        la.style.transformOrigin = `${this.dimensions.bodyThickness/2}px 0px ${neckHeight}px`;
-        ra.style.transform = `rotateY(${-deg}deg)`;
-        ra.style.transformOrigin = `${this.dimensions.bodyThickness/2}px 0px ${neckHeight}px`;
-        ll.style.transform = `rotateY(${-degL}deg)`;
-        ll.style.transformOrigin = `${this.dimensions.bodyThickness/2}px 0px ${this.dimensions.legHeight}px`;
-        rl.style.transform = `rotateY(${degL}deg)`;
-        rl.style.transformOrigin = `${this.dimensions.bodyThickness/2}px 0px ${this.dimensions.legHeight}px`;
+        // la.style.transformOrigin = `${this.dimensions.bodyThickness/2}px 0px ${neckHeight}px`;
+        la.style.transformOrigin = `0 0 0`;
+        la.style.transform = `translate3d(${this.dimensions.armGap}px, ${-0.5}px, ${neckHeight+5}px) rotateY(${deg+180}deg) translate3d(${0}px, 0px, ${-this.dimensions.armHeight}px)`;
+        // ra.style.transformOrigin = `${this.dimensions.bodyThickness/2}px 0px ${neckHeight}px`;
+        ra.style.transformOrigin = `0 0 0`;
+        ra.style.transform = `translate3d(${this.dimensions.armGap}px, ${-0.5}px, ${neckHeight+5}px) rotateY(${-deg+180}deg)  translate3d(${0}px, 0px, ${-this.dimensions.armHeight}px)`;
+        // ll.style.transformOrigin = `${this.dimensions.bodyThickness/2}px 0px ${this.dimensions.legHeight}px`;
+        ll.style.transformOrigin = '0px 0px 0px';
+        ll.style.transform = `translate3d(0px, 0px, ${this.dimensions.legHeight}px) rotateY(${-degL+180}deg)`;
+        // rl.style.transformOrigin = `${this.dimensions.bodyThickness/2}px 0px ${this.dimensions.legHeight}px`;
+        rl.style.transformOrigin = '0px 0px 0px';
+        rl.style.transform = `translate3d(0px, 0px, ${this.dimensions.legHeight}px) rotateY(${degL+180}deg)`;
     }
 
     getBoundingBox() {
